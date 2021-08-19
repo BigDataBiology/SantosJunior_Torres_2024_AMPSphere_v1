@@ -57,10 +57,10 @@ def main():
                      columns=['sk', 'k', 'p', 'c', 'o', 'f', 'g', 's'])
     data['hosts'].fillna('Unknown', inplace=True)
 
-    data['origins'][['sk', 'k', 'p', 'c', 'o', 'f', 'g', 's']] = \
-        pd.DataFrame(lt.LineageTracker(ids=data['origins']['taxid'].astype(int)).paths_sp,
-                     columns=['sk', 'k', 'p', 'c', 'o', 'f', 'g', 's'])
-    data['origins'].fillna('Unknown', inplace=True)
+    # data['origins'][['sk', 'k', 'p', 'c', 'o', 'f', 'g', 's']] = \
+    #     pd.DataFrame(lt.LineageTracker(ids=data['origins']['taxid'].astype(int)).paths_sp,
+    #                  columns=['sk', 'k', 'p', 'c', 'o', 'f', 'g', 's'])
+    # data['origins'].fillna('Unknown', inplace=True)
     print('Generating plots...')
     figures = dict(
         geo=GeoDistribution(data['geo'], lat='lat', lon='lon', size='size', color='habitat_type'),
