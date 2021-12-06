@@ -45,9 +45,18 @@ def main():
 
     print('Generating plots...')
     figures = dict(
-        geo=GeoDistribution(data['geo'], lat='lat', lon='lon', size='size', color='habitat_type'),
-        habitats=px.bar(data['habitats'], y='general_envo_name', x='size', orientation='h', color_discrete_sequence=['#1b9e77']),
-        origins=px.bar(data['origins'], y='microbial_source', x='size', orientation='h', color_discrete_sequence=['#d95f02'])
+        geo=GeoDistribution(data['geo'], lat='lat', lon='lon', size='size', color='habitat_type')
+            .update_layout(title='Geographical distribution'),
+        habitats=px.bar(data['habitats'], y='general_envo_name', x='size',
+                        orientation='h', color_discrete_sequence=['#1b9e77'])
+            .update_layout(title='Habitat distribution',
+                           xaxis=dict(title='# small ORF genes'),
+                           yaxis=dict(title='Habitat')),
+        origins=px.bar(data['origins'], y='microbial_source', x='size',
+                       orientation='h', color_discrete_sequence=['#d95f02'])
+            .update_layout(title='Microbial source distribution',
+                           xaxis=dict(title='# small ORF genes'),
+                           yaxis=dict(title='Microbial source')),
     )
 
     config = {
