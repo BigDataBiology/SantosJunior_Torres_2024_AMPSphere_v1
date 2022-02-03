@@ -1,0 +1,62 @@
+Species name	Host(s)	Host site(s)	Strain	AMPs
+P. albensis	ruminant	rumen	Prevotella_albensis__JCM_12258__AB547669	23
+P. amnii	human	vagina,amniotic fluid	Prevotella_amnii__JCM_14753__AB547670	8
+P. aurantiaca	human	oral	Prevotella_aurantiaca__JCM_15754__AB480534	9
+P. baroniae	human	oral	Prevotella_baroniae__DSM_16972__FJ940882	7
+P. bergensis	human	skin	Prevotella_bergensis__JCM_13869__AB547672	5
+P. bivia	human	vagina	Prevotella_bivia__JCM_6331__AB547673	18
+P. brevis	ruminant	rumen	Prevotella_brevis__GA_33__AJ011682	28
+P. brunnea	human	wound	Prevotella_brunnea__A2672__MK424351	0
+P. bryantii	ruminant	rumen	Prevotella_bryantii__B14__AJ006457	42
+P. buccae	human	oral	Prevotella_buccae__JCM_12245__AB547675	52
+P. buccalis	human	vagina	Prevotella_buccalis__JCM_12246__AB547676	21
+P. cerevisiae	environmental	built environment, fermentation	Prevotella_cerevisiae__JCM_30867__LC331291	0
+P. colorans	human	wound	Prevotella_colorans__A1336__KT886066	24
+P. copri complex	human	gut	Prevotella_copri__CB7__AB064923	0
+P. corporis	human	vagina	Prevotella_corporis__JCM_8529__AB547677	17
+P. dentalis	human	oral	Prevotella_dentalis__DSM_3688__X81876	0
+P. dentasini	nhp	oral	Prevotella_dentasini__JCM_15908__AB547681	3
+P. denticola	human	vagina,oral	Prevotella_denticola__JCM_13449__AB547679	12
+P. disiens	human	vagina,gut,bartholin abscess	Prevotella_disiens__JCM_6334__AB547682	16
+P. enoeca	human	oral	Prevotella_enoeca__ATCC_51261__AJ005635	5
+P. falsenii	nhp	oral	Prevotella_falsenii__04052__AB429504	5
+P. fusca	human	oral	Prevotella_fusca__W1435__FJ545433	10
+P. heparinolytica	human	oral	Prevotella_heparinolytica__ATCC_35895__L16487	0
+P. histicola	human	vagina,oral	Prevotella_histicola__T05-04__EU126661	129
+P. hominis	human	gut	Prevotella_hominis__BCRC_81118__MK567960	0
+P. ihumii	human	gut	Prevotella_ihumii__Marseille-P3385__LT631517	8
+P. intermedia	human	oral,empyema	Prevotella_intermedia__ATCC_25611__AF414821	44
+P. jejuni	human	gut	Prevotella_jejuni__CD3_:_28__JQ778983	109
+P. koreensis	human	oral	Prevotella_koreensis__KCOM_3-_155__MK452274	0
+P. lascolaii	human	vagina	Prevotella_lascolaii__khD1__LN998055	94
+P. loescheii	human	oral	Prevotella_loescheii__JCM_8530__AB547689	52
+P. maculosa	human	oral	Prevotella_maculosa__JCM_15638__AB547690	11
+P. marseillensis	human	gut	Prevotella_marseillensis__Marseille-P8229__LR031296	0
+P. marshii	human	oral	Prevotella_marshii__E9.34__AF481227	6
+P.massilia timonensis	human	gut	Prevotella_massiliensis__Smarlab_121567__AF487886	0
+P. melaninogenica	human	vagina,oral,sputum	Prevotella_melaninogenica__JCM_6325__AB547693	215
+P. micans	human	oral	Prevotella_micans__E7.56__AF481228	4
+P. multiformis	human	oral	Prevotella_multiformis__PPPA21__AB182483	7
+P. multisaccharivorax	human	oral	Prevotella_multisaccharivorax__JCM_12954__AB200414	17
+P. nanceiensis	human	blood,oral	Prevotella_nanceiensis__JCM_15639__AB547695	60
+P. nigrescens	human	oral	Prevotella_nigrescens__JCM_12250__AB547696	42
+P. oralis	human	vagina,gut,oral	Prevotella_oralis__JCM_12251__AB547698	16
+P. oris	human	oral,airways	Prevotella_oris__JCM_8540__AB547701	27
+P. oryzae	environmental	soil	Prevotella_oryzae__KB_3__AB078826	16
+P. oulorum	human	oral	Prevotella_oulorum__JCM_14966__AB547702	20
+P. pallens	human	oral	Prevotella_pallens__10371__Y13105	71
+P. paludivivens	environmental	soil	Prevotella_paludivivens__KB7__AB078827	55
+P. pectinovora	swine	gut	Prevotella_pectinovora__P4-76__JXQI01000042	0
+P. phocaeensis	human	gut	Prevotella_phocaeensis__SN19__LN998069	0
+P. pleuritidis	human	pleural fluid	Prevotella_pleuritidis__JCM_14110__AB278593	4
+P. rara	human	gut	Prevotella_rara__109__KX198132	0
+P. rectalis	human	gut	Prevotella_rectalis__Marseille-P4334__LS488976	0
+P. ruminicola	ruminant	rumen	Prevotella_ruminicola__ATCC_19189__L16482	123
+P. saccharolytica	human	oral	Prevotella_saccharolytica__D033B-12-2__FJ825149	27
+P. salivae	human	gut,oral	Prevotella_salivae__JCM_12084__AB108826	105
+P. scopos	human	oral	Prevotella_scopos__W2052__FJ545434	12
+P. shahii	human	oral	Prevotella_shahii__JCM_12083__AB108825	114
+P. stercorea	human	gut	Prevotella_stercorea__CB35__AB244774	157
+P. timonensis	human	vagina,breast abscess	Prevotella_timonensis__JCM_15640__AB547706	20
+P. veroralis	human	oral	Prevotella_veroralis__JCM_6290__AB547707	14
+P. vespertina	human	wound	Prevotella_vespertina__A2879__MK424350	0
