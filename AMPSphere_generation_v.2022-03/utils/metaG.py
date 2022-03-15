@@ -67,11 +67,10 @@ def anno_metaG(data_folder, analysis_folder):
     Fix the format for the shortened metaG info input
     '''
     import pandas as pd
-    
+
+    # generating correspondence list of access and genes    
     corrlist = f'{analysis_folder}/AMPsphere_GMSC_correspondence.tsv.gz'
     corrlist = pd.read_table(corrlist, sep='\t', header='infer')
-
-    # generating correspondence list of access and genes
     corrlist = corrlist[['accession', 'genes']]
     corrlist = corrlist.set_index('accession')
     corrlist['genes'] = [x.split(',') for x in corrlist.genes]
@@ -89,20 +88,29 @@ def anno_metaG(data_folder, analysis_folder):
                'rbs_spacer', 'gc_cont']
 
     newdf = pd.DataFrame()
-    for record in pd.read_table(f'{data_folder}/shortened_renaming.txt.gz',
-                                sep='\t',
-                                header=None,
-                                chunksize=2_500_000):
+    infile = f'{data_folder}/shortened_renaming.txt.gz'
+    for idx, record in enumerate(pd.read_table(infile,
+                                               sep='\t',
+                                               header=None,
+                                               chunksize=500_000)):
         record = record.merge(on=0, right=dictresource)
-        for f in record.itertuples():
-            f = format_geneinfo(f)
-            if len(f) == 13:
-                df = pd.DataFrame(f).T
-                newdf = pd.concat([newdf, df])
+        record = [format_geneinfo(f) for f in record.itertuples()]
+        df = pd.DataFrame(record, columns=columns)
+        newdf = pd.concat([newdf, df])
 
-    newdf.columns = columns
-    newdf.to_csv(f'{analysis_folder}/AMPsphere_metaG_annotation.tsv.gz',
-                 sep='\t', header=True, index=None)
+    ofile = f'{analysis_folder}/AMPsphere_metaG_annotation.tsv.gz'
+    
+    newdf = newdf.sort_values(by=['accession',
+                                  'gmsc',
+                                  'sample'],
+                              ascending=[True,
+                                         True,
+                                         True])
+                                         
+    newdf.to_csv(ofile,
+                 sep='\t',
+                 header=True,
+                 index=None)
 
 
 def origins(data_folder, analysis_folder):
@@ -117,8 +125,8 @@ def origins(data_folder, analysis_folder):
     progenomes = f'{analysis_folder}/AMPsphere_proGenomes_correspondence.tsv.gz'
     metagenomes = f'{analysis_folder}/AMPsphere_metaG_annotation.tsv.gz'
     # outputs
-    species_out = f'{analysis_folder}/AMPSphere_v.2021-03.species.tsv.gz'
-    origin_file = f'{analysis_folder}/AMPSphere_v.2021-03.origin_samples.tsv.gz'
+    species_out = f'{analysis_folder}/AMPSphere_v.2022-03.species.tsv.gz'
+    origin_file = f'{analysis_folder}/AMPSphere_v.2022-03.origin_samples.tsv.gz'
 
     # processing gmsc genes
     gmsc = pd.read_table(corrlist, sep='\t', header='infer')
@@ -137,6 +145,7 @@ def origins(data_folder, analysis_folder):
     progenomes = pd.DataFrame.from_dict(progenomes,
                                         orient='index',
                                         columns=['progenomes'])
+                                        
     progenomes = progenomes.reset_index()
     progenomes = progenomes.rename({'index': 'accession'},
                                    axis=1)
@@ -148,11 +157,12 @@ def origins(data_folder, analysis_folder):
         metagenomes[record[0]] = ','.join(record[1]['sample'].tolist())
     
     metagenomes = pd.DataFrame.from_dict(metagenomes,
-                                        orient='index',
-                                        columns=['metagenomes'])
-    metagenomes = progenomes.reset_index()
-    metagenomes = progenomes.rename({'index': 'accession'},
-                                    axis=1)
+                                         orient='index',
+                                         columns=['metagenomes'])
+                                        
+    metagenomes = metagenomes.reset_index()
+    metagenomes = metagenomes.rename({'index': 'accession'},
+                                     axis=1)
     
     # merging
     gmsc = gmsc.merge(on='accession', right=progenomes, how='outer')
@@ -171,17 +181,92 @@ def assoc_metadata(data_folder, analysis_folder):
     Associate metadata to the AMPSphere info
     '''
     import pandas as pd
+    from collections import Counter
     
     # inputs
-    corrlist = f'{analysis_folder}/AMPsphere_GMSC_correspondence.tsv.gz' 
     metagenomes = f'{analysis_folder}/AMPsphere_metaG_annotation.tsv.gz'
     metadata = f'{data_folder}/metadata.tsv'
-    # outputs
-    host_out = f'{analysis_folder}/AMPSphere_v.2021-03.hosts.tsv.gz'
-    location_out = f'{analysis_folder}/AMPSphere_v.2021-03.locations.tsv.gz'
-    microont_out = f'{analysis_folder}/AMPSphere_v.2021-03.microontology.tsv.gz'
 
+    # outputs
+    host_out = f'{analysis_folder}/AMPSphere_v.2022-03.hosts.tsv.gz'
+    location_out = f'{analysis_folder}/AMPSphere_v.2022-03.locations.tsv.gz'
+    microont_out = f'{analysis_folder}/AMPSphere_v.2022-03.microontology.tsv.gz'
+
+    # load metagenomes
+    metagenomes = pd.read_table(metagenomes, sep='\t', header='infer')
+    metagenomes = metagenomes[['accession', 'sample']]
     
+    # load metadata
+    metadata = pd.read_table(metadata, sep='\t', header='infer')
+    metadata = metadata.rename({'sample_accession': 'sample'}, axis=1)
+    metadata = metadata[['sample',
+                         'microontology',
+                         'geographic_location',
+                         'latitude',
+                         'longitude',
+                         'environment_material',
+                         'host_common_name',
+                         'host_scientific_name',
+                         'host_tax_id']]
+
+    # merge
+    metagenomes = metagenomes.merge(on='sample', right=metadata)
+    
+    # microontology
+    micro = metagenomes[['accession',
+                         'microontology']]
+    
+    micro = micro.pivot_table(index=['accession',
+                                     'microontology'],
+                              aggfunc='size')
+
+    micro = micro.reset_index()
+    micro = micro.rename({0: 'counts'},
+                         axis=1)                              
+                         
+    micro.to_csv(microont_out,
+                 sep='\t',
+                 header=True,
+                 index=None)    
+
+    # geoloc
+    geoloc = metagenomes[['accession',
+                          'geographic_location']]
+    
+    geoloc = geoloc.pivot_table(index=['accession',
+                                       'geographic_location'],
+                                aggfunc='size')
+                                
+    geoloc = geoloc.reset_index()
+    geoloc = geoloc.rename({0: 'counts'},
+                         axis=1)                              
+
+    geoloc.to_csv(location_out,
+                  sep='\t',
+                  header=True,
+                  index=None)    
+
+    # host_out
+    host = metagenomes[['accession',
+                        'host_common_name',
+                        'host_scientific_name',
+                        'host_tax_id']]
+
+    host = host.dropna()                    
+    host = host.pivot_table(index=['accession',
+                                   'host_common_name',
+                                   'host_scientific_name',
+                                   'host_tax_id'],
+                            aggfunc='size')
+                            
+    host = host.reset_index()
+    host = host.rename({0: 'counts'},
+                       axis=1)                              
+
+    host.to_csv(host_out,
+                sep='\t',
+                header=True,
+                index=None)
 
 
 def metag():
@@ -194,7 +279,7 @@ def metag():
         os.makedirs(f, exist_ok=True)
 
     print('Filter original GMSC large file')    
-#    shorten_input(data_folder, analysis_folder)
+    shorten_input(data_folder, analysis_folder)
     print('Work on the filtered subset')
     anno_metaG(data_folder, analysis_folder)
     print('Generating file with AMP origins')

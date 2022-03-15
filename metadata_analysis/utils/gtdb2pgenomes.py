@@ -45,12 +45,12 @@ def conversion_from_GTDB_to_pGenomes():
 
     df = pd.merge(on='ncbi_biosample',
                   right=refdata,
-                  left=data).drop(['ncbi_tax_id'],
+                  left=data).drop(['ncbi_taxid_x', 'ncbi_taxid_y'],
                                   axis=1)
 
     df2 = pd.merge(on='ncbi_biosample',
                    right=refdata,
-                   left=data2).drop(['ncbi_tax_id'],
+                   left=data2).drop(['ncbi_taxid_x', 'ncbi_taxid_y'],
                                     axis=1)
 
     dfd = pd.concat([df, df2])
@@ -86,7 +86,7 @@ def conversion_from_GTDB_to_pGenomes():
     df = df.drop(['accession', 'checkm_marker_lineage',
                   'gtdb_taxonomy','ncbi_assembly_name',
                   'ncbi_bioproject', 'ncbi_organism_name',
-                  'ncbi_taxid', 'ncbi_taxonomy'],
+                  'ncbi_taxonomy'],
                  axis=1)
 
     print('... export 2')

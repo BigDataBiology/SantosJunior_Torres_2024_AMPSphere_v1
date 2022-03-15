@@ -23,7 +23,7 @@ def genes():
         for x in f[1]: dictresource[x] = f[0]
 
     # generating output
-    fout = f'{analysis_folder}/AMPSphere_v.2021-03.fna.xz'
+    fout = f'{analysis_folder}/AMPSphere_v.2022-03.fna.xz'
     
     fin = f'{data_folder}/gmsc_genes.fna.xz'
     fin = lzma.open(fin, 'rt', encoding='utf-8')

@@ -53,11 +53,11 @@ def dramp_anno():
     # database to be searched against
     dramp = f'{data_folder}/DRAMP_GCP2019.fasta'
     # fasta input        
-    fin = f'{analysis_folder}/AMPSphere_v.2021-03.faa.gz'
+    fin = f'{analysis_folder}/AMPSphere_v.2022-03.faa.gz'
     # intermediate mmseqs result
     bout = f'{analysis_folder}/DRAMP_annotation.raw.tsv'
     # mmseqs parsed table outputted
-    ofile = f'{analysis_folder}/DRAMP_anno_AMPSphere_v.2021-03.parsed.tsv.gz'
+    ofile = f'{analysis_folder}/DRAMP_anno_AMPSphere_v.2022-03.parsed.tsv.gz'
 
     anno(fin, ofile, dramp, bout)
     

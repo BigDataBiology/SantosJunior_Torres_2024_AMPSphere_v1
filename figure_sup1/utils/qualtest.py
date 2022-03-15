@@ -4,7 +4,7 @@ def getref():
     '''
     import pandas as pd
     
-    ref = pd.read_table('data/gmsc_amp_genes_envohr_source.tsv',
+    ref = pd.read_table('data/gmsc_amp_genes_envohr_source.tsv.gz',
                         sep='\t',
                         header='infer',
                         low_memory=False)
@@ -256,15 +256,15 @@ def quality():
     print('Grabing reference')
     ref = getref()
     print('Processing Antifam results')
-#    antifam_process(ref)
+    antifam_process(ref)
     print('Processing coordinates results')
-#    terminal_place_process(ref)
+    terminal_place_process(ref)
     print('Processing metaproteomes results')
-#    metaP(ref)
+    metaP(ref)
     print('Processing metatranscriptomes results')
     metaT(ref)
     print('Processing RNAcode results')
-#    RNAcode(ref)
+    RNAcode(ref)
     print('Assembling results')
     assemble_tests()
     

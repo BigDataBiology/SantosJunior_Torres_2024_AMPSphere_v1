@@ -235,8 +235,8 @@ def calc_features():
     data_folder = 'data/'
     analysis_folder = 'analysis/'
     
-    ifile = f'{analysis_folder}/AMPSphere_v.2021-03.faa.gz'
-    ofile = f'{analysis_folder}/AMPSphere_v.2021-03.features.tsv.gz'
+    ifile = f'{analysis_folder}/AMPSphere_v.2022-03.faa.gz'
+    ofile = f'{analysis_folder}/AMPSphere_v.2022-03.features.tsv.gz'
     
     print('Calculating peptide features used by Macrel...')
     seqs, headers, features = [], [], []

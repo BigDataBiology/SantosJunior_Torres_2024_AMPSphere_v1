@@ -17,11 +17,11 @@ def helical_wheel():
     os.makedirs(hf,
                 exist_ok=True)
 
-    infile = gzip.open(f'{analysis_folder}/AMPSphere_v.2021-03.faa.gz',
+    infile = gzip.open(f'{analysis_folder}/AMPSphere_v.2022-03.faa.gz',
                        'rt',
                        encoding='utf-8')
 
-    for index, record in enumerate(SeqIO.parse(infile,"fasta")):
+    for record in SeqIO.parse(infile,"fasta"):
             file_name = f'{hf}/helicalwheel_{str(record.id)}.svg'
             helical_wheel(str(record.seq),
                           moment=True,

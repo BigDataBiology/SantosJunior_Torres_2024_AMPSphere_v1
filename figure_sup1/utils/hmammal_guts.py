@@ -10,7 +10,7 @@ def heatmap_mammal_guts():
     
 
     print('Load data')
-    data = pd.read_table('data/gmsc_amp_genes_envohr_source.tsv',
+    data = pd.read_table('data/gmsc_amp_genes_envohr_source.tsv.gz',
                          sep='\t',
                          header='infer')
 
@@ -58,3 +58,4 @@ def heatmap_mammal_guts():
     sns.heatmap(df, annot=True, cmap='YlOrBr', mask=mask, square=True)
     plt.tight_layout()
     plt.savefig('figure_S1d_heatmap_mammalguts_overlap.svg')
+    

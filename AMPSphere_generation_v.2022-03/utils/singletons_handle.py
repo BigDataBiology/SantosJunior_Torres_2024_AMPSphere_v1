@@ -405,7 +405,7 @@ def spheres(analysis_folder):
                  'SPHERE_fam level III']]
 
     data = data.sort_values(by='AMP accession')             
-    data.to_csv(f'{analysis_folder}/SPHERE_v.2021-03.levels_assessment.tsv.gz',
+    data.to_csv(f'{analysis_folder}/SPHERE_v.2022-03.levels_assessment.tsv.gz',
                 sep='\t', header=True, index=None)
                 
     print('Organizing results')
@@ -430,7 +430,7 @@ def fasta_file(analysis_folder):
     data = pd.read_table(f'{analysis_folder}/AMPsphere_GMSC_correspondence.tsv.gz',
                          sep='\t', header='infer')
     
-    fams = pd.read_table(f'{analysis_folder}/SPHERE_v.2021-03.levels_assessment.tsv.gz',
+    fams = pd.read_table(f'{analysis_folder}/SPHERE_v.2022-03.levels_assessment.tsv.gz',
                          sep='\t', header='infer')
     
     fams = fams.rename({'AMP accession': 'accession',
@@ -443,7 +443,7 @@ def fasta_file(analysis_folder):
     df = data[['accession', 'sequence']]
     df = df.merge(on='accession', right=fams[['accession', 'SPHERE-III', 'clustering']])
     
-    with gzip.open(f'{analysis_folder}/AMPSphere_v.2021-03.faa.gz', 'wt', encoding='utf-8') as ofile:
+    with gzip.open(f'{analysis_folder}/AMPSphere_v.2022-03.faa.gz', 'wt', encoding='utf-8') as ofile:
         for row in df.itertuples():
             _, header, seq, f, _ = row
             ofile.write(f'>{header} | {f}\n{seq}\n')

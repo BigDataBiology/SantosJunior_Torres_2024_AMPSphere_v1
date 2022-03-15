@@ -6,6 +6,16 @@ def inputsgen():
     os.makedirs('data', exist_ok=True)
     
     # publicly available in the ProGenomes resource
+    print('downloading proGenomes2.1_specI_lineageNCBI.tab from ProGenomes')
+    server = "progenomes.embl.de"
+    address = "data"
+    finput = 'proGenomes2.1_specI_lineageNCBI.tab'
+    subprocess.call(['wget',
+                     f'https://{server}/{address}/{finput}',
+                     '--output-document',
+                     'data/proGenomes2.1_specI_lineageNCBI.tab'])
+
+    # publicly available in the ProGenomes resource
     print('downloading proGenomes2.1_specI_clustering.tab from ProGenomes')
     server = "progenomes.embl.de"
     address = "data"
@@ -13,7 +23,7 @@ def inputsgen():
     subprocess.call(['wget',
                      f'https://{server}/{address}/{finput}',
                      '--output-document',
-                     'data/pgenomes_samples.tsv'])
+                     'data/progenomes_samples.tsv'])
 
     # publicly available in the GTDB resource
     print('downloading bac120_metadata_r202 from GTDB')
@@ -56,24 +66,24 @@ def inputsgen():
     os.remove('data/ar122_metadata_r202.tar.gz')
 
     # publicly available in the AMPSphere resource
-    print('downloading AMPSphere_v.2021-03.fna.xz from Zenodo')
-    server = "zenodo.org"
-    address = "record/4606582/files"
-    finput = 'AMPSphere_v.2021-03.fna.xz'
-    subprocess.call(['wget',
-                     f'https://{server}/{address}/{finput}?download=1',
-                     '--output-document',
-                     'data/AMPSphere_v.2021-03.fna.xz'])
+    print('downloading AMPSphere_v.2022-03.fna.xz')
+    server = "ubuntu@aws.big-data-biology.org"
+    address = "/share/work/Celio/AMPSphere/v2022_03/AMPSphere_generation_v.2022-03/analysis/"
+    finput = 'AMPSphere_v.2022-03.fna.xz'
+    subprocess.call(['rsync',
+                     '-avzP',
+                     f'{server}:{address}/{finput}',
+                     'data/'])
 
     # publicly available in the AMPSphere resource
-    print('downloading AMPSphere_v.2021-03.origin_samples.tsv.gz from Zenodo')
-    server = "zenodo.org"
-    address = "record/4606582/files"
-    finput = 'AMPSphere_v.2021-03.origin_samples.tsv.gz'
-    subprocess.call(['wget',
-                     f'https://{server}/{address}/{finput}?download=1',
-                     '--output-document',
-                     'data/AMPSphere_v.2021-03.origin_samples.tsv.gz'])
+    print('downloading AMPSphere_v.2022-03.origin_samples.tsv.gz')
+    server = "ubuntu@aws.big-data-biology.org"
+    address = "/share/work/Celio/AMPSphere/v2022_03/AMPSphere_generation_v.2022-03/analysis/"
+    finput = 'AMPSphere_v.2022-03.origin_samples.tsv.gz'
+    subprocess.call(['rsync',
+                     '-avzP',
+                     f'{server}:{address}/{finput}',
+                     'data/'])
 
     # generated during GMSC analysis
     print('downloading the table GMSC10.ProGenomes2.coords.txt.gz')
@@ -107,21 +117,23 @@ def inputsgen():
 
     # generated during annotation of samples for AMPSphere
     print('downloading metadata')
-    server = "ubuntu@aws.big-data-biology.org"
-    address = "/share/work/Celio/files_for_figures/metadata"
+    server = "raw.githubusercontent.com"
+    address = "BigDataBiology/global_data/master/freeze.v2"
     finput = 'metadata.tsv'
-    subprocess.call(['rsync',
-                     '-avzP',
-                     f'{server}:{address}/{finput}',
-                     'data/'])
+    token = 'GHSAT0AAAAAABNWGHYZ4VSZJ2CRBCOPV5BGYRPXCSA'
+    subprocess.call(['wget',
+                     '-O',
+                     'data/metadata.tsv',
+                     f'https://{server}/{address}/{finput}?token={token}'])
 
-    # generated during Figure S1 quality analysis
-    print('downloading general_envo_names.tsv')
-    server = "ubuntu@aws.big-data-biology.org"
-    address = "/share/work/Celio/files_for_figures/metadata"
+    # generated during annotation of samples for AMPSphere
+    print('downloading general envo names')
+    server = "raw.githubusercontent.com"
+    address = "BigDataBiology/global_data/master/freeze.v2"
     finput = 'general_envo_names.tsv'
-    subprocess.call(['rsync',
-                     '-avzP',
-                     f'{server}:{address}/{finput}',
-                     'data/'])
-                     
+    token = 'GHSAT0AAAAAABNWGHYZV7HGOUYSQX35NW2KYRPX3CA'
+    subprocess.call(['wget',
+                     '-O',
+                     'data/general_envo_names.tsv',
+                     f'https://{server}/{address}/{finput}?token={token}'])
+

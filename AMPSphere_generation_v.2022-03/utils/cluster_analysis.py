@@ -12,7 +12,7 @@ def analyze_level_III(analysis_folder):
     from Bio import SeqIO
         
     # loading info about peptides and families
-    infile = f'{analysis_folder}/AMPSphere_v.2021-03.faa.gz'
+    infile = f'{analysis_folder}/AMPSphere_v.2022-03.faa.gz'
     lv3 = dict()
     for record in SeqIO.parse(gzip.open(infile, 
                                         'rt',

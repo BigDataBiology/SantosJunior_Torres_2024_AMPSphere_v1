@@ -14,9 +14,9 @@ def ugenes_plot():
 
     print('Loading the genes')
     headers, seqs = [], []
-    with lzma.open('data/AMPSphere_v.2021-03.fna.xz', 'rt') as infile:
+    with lzma.open('data/AMPSphere_v.2022-03.fna.xz', 'rt') as infile:
         for record in SeqIO.parse(infile, 'fasta'):
-            headers.append(record.description.split()[1])
+            headers.append(record.description.split(' | ')[1])
             seqs.append(str(record.seq))
 
     print('Generating a table with sequence and AMP headers')
@@ -51,5 +51,6 @@ def ugenes_plot():
     ds.plot.bar(legend=False, cmap='Dark2')
     plt.xlabel('Number of unique genes')
     plt.ylabel('AMP candidates')
+    plt.tight_layout()
     plt.savefig('figure_S1b_unique_genes.svg')
 

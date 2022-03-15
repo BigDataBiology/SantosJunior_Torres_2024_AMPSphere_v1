@@ -7,7 +7,7 @@ def filter_quality():
     import pandas as pd
     from collections import Counter
 
-    families = pd.read_table('data/SPHERE_v.2021-03.levels_assessment.tsv.gz',
+    families = pd.read_table('data/SPHERE_v.2022-03.levels_assessment.tsv.gz',
                              sep='\t',
                              header='infer')
     families = families[['AMP accession','SPHERE_fam level III']]
@@ -68,12 +68,11 @@ def test_enrichment():
 
     print('Load data')
     # dramp candidates are those AMPs with homologs in DRAMP
-    dramp_candidates =  pd.read_table('data/dramp_candidates.txt',
+    annotated_candidates =  pd.read_table('data/DRAMP_annotation.raw.tsv',
                                       header=None)
 
-    # annotated candidates are those AMPs with homologs in DRAMP
-    annotated_candidates = pd.read_table('data/annotated_candidates.txt',
-                                         header=None)
+    annotated_candidates = annotated_candidates[annotated_candidates[10] <= 1e-5]
+    annotated_candidates = annotated_candidates[0].drop_duplicates()
 
     q_candidates = pd.read_table('quality_candidates.txt',
                                  header=None)
@@ -85,19 +84,9 @@ def test_enrichment():
     
     print('Setting enrichment analysis')
     print('Testing enrichment')
-    print('1. high-quality candidates vs. annotated_candidates/AMPSphere')
-    m = len(annotated_candidates.merge(on=0, right=hq_candidates))
-    M = len(hq_candidates)
-    n = len(annotated_candidates)
-    print(f'N {N}, n {n}, M {M}, m {m}')
-    print(f'Ratio of hq candidates in annotated candidates: {m*100/n}')
-    print(f'Ratio of hq candidates in AMPSphere: {M*100/N}')
-    print(f'Enrichment: {(m*100*N)/(n*M*100)}')
-    print(f'p-value: {enrichment(N, n, M, m)}')
-
-    print('2. quality candidates vs. annotated_candidates/AMPSphere')
+    print('Quality candidates vs. annotated_candidates/AMPSphere')
     q = pd.concat([hq_candidates, q_candidates])
-    m = len(annotated_candidates.merge(on=0, right=q))
+    m = len(annotated_candidates[annotated_candidates.isin(q[0])])
     M = len(q)
     n = len(annotated_candidates)
     print(f'N {N}, n {n}, M {M}, m {m}')
@@ -110,4 +99,11 @@ def test_enrichment():
 def enrichment_analysis():
     filter_quality()
     test_enrichment()
+
+    '''
+    Ratio of qc candidates in annotated candidates: 7.335541883577851
+    Ratio of qc candidates in AMPSphere: 3.49693919383716
+    Enrichment: 2.0977035850396435
+    p-value: 4.9319791212235016e-49
+    '''
 

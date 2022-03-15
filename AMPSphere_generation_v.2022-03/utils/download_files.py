@@ -4,11 +4,12 @@ def inputsgen():
     
     # create data folder
     os.makedirs('data', exist_ok=True)
+    os.makedirs('analysis', exist_ok=True)
     
     # patch colors for the HMMlogo package
     print('downloading ALPHA')
     server = "ubuntu@aws.big-data-biology.org"
-    address = "/share/work/Celio/AMPSphere/data"
+    address = "/share/work/Celio/AMPSphere/v2022_03/AMPSphere_generation_v.2022-03/data/"
     finput = 'alph.json'
     subprocess.call(['rsync',
                      '-avzP',
@@ -18,7 +19,7 @@ def inputsgen():
     # patch colors for the HMMlogo package
     print('downloading CMAP')
     server = "ubuntu@aws.big-data-biology.org"
-    address = "/share/work/Celio/AMPSphere/data"
+    address = "/share/work/Celio/AMPSphere/v2022_03/AMPSphere_generation_v.2022-03/data/"
     finput = 'cmap.json'
     subprocess.call(['rsync',
                      '-avzP',
@@ -49,7 +50,7 @@ def inputsgen():
     # filtered in detail withtout those black listed
     print('downloading proGenomes2.1 blacklist')
     server = "ubuntu@aws.big-data-biology.org"
-    address = "/share/work/Celio/AMPSphere/data"
+    address = "/share/work/Celio/AMPSphere/v2022_03/AMPSphere_generation_v.2022-03/data/"
     finput = 'combinedVsearch3.50p.20n.norm.opt.0.042.filteredBlackList.map'
     subprocess.call(['rsync',
                      '-avzP',
@@ -83,7 +84,7 @@ def inputsgen():
     # resource available publicly in DRAMP v2 website
     print('downloading databases for homology search')
     server = "ubuntu@aws.big-data-biology.org"
-    address = "/share/work/Celio/files_for_figures/databases_homology/"
+    address = "/share/work/Celio/AMPSphere/v2022_03/AMPSphere_generation_v.2022-03/data/"
     finput = "DRAMP.fa"
     subprocess.call(['rsync',
                      '-avzP',
@@ -94,20 +95,20 @@ def inputsgen():
     # available publicly in DRAMP v2 website
     print('downloading databases for homology search')
     server = "ubuntu@aws.big-data-biology.org"
-    address = "/share/work/Celio/AMPSphere/data"
+    address = "/share/work/Celio/AMPSphere/v2022_03/AMPSphere_generation_v.2022-03/data/"
     finput = "dramp_anno.py"
     subprocess.call(['rsync',
                      '-avzP',
                      f'{server}:{address}/{finput}',
                      'data/'])
 
-    # pre-computed resource generated during AMPSphere v.2021-03
+    # pre-computed resource generated during AMPSphere v.2022-03
     # it was generated using the original mmseqs version
     # because of that results are discrepant from recent 
     # versions
     print('downloading the table DRAMP_filter.raw.tsv')
     server = "ubuntu@aws.big-data-biology.org"
-    address = "/share/work/Celio/AMPSphere/data"
+    address = "/share/work/Celio/AMPSphere/v2022_03/AMPSphere_generation_v.2022-03/data/"
     finput = "DRAMP_filter.raw.tsv"
     subprocess.call(['rsync',
                      '-avzP',
@@ -135,21 +136,11 @@ def inputsgen():
                      'data/'])
 
     # generated during GMSC analysis
-    print('downloading the table GMSC10.metag_smorfs.rename.txt.xz')
-    server = "ubuntu@aws.big-data-biology.org"
-    address = "/GMSC10"
-    finput = "GMSC10.metag_smorfs.rename.txt.xz"
-    subprocess.call(['rsync',
-                     '-avzP',
-                     f'{server}:{address}/{finput}',
-                     'data/'])
-
-    # generated during GMSC analysis
     # genes selected from the large file
     # generated elsewhere
     print('downloading the table gmsc_genes.fna.xz')
     server = "ubuntu@aws.big-data-biology.org"
-    address = "/share/work/Celio/AMPSphere/data"
+    address = "/share/work/Celio/AMPSphere/v2022_03/AMPSphere_generation_v.2022-03/data/"
     finput = "gmsc_genes.fna.xz"
     subprocess.call(['rsync',
                      '-avzP',
@@ -158,11 +149,12 @@ def inputsgen():
 
     # generated during annotation of samples for AMPSphere
     print('downloading metadata')
-    server = "ubuntu@aws.big-data-biology.org"
-    address = "/share/work/Celio/files_for_figures/metadata"
+    server = "raw.githubusercontent.com"
+    address = "BigDataBiology/global_data/master/freeze.v2"
     finput = 'metadata.tsv'
-    subprocess.call(['rsync',
-                     '-avzP',
-                     f'{server}:{address}/{finput}',
-                     'data/'])
+    token = 'GHSAT0AAAAAABNWGHYZ4VSZJ2CRBCOPV5BGYRPXCSA'
+    subprocess.call(['wget',
+                     '-O',
+                     'data/metadata.tsv',
+                     f'https://{server}/{address}/{finput}?token={token}'])
 
