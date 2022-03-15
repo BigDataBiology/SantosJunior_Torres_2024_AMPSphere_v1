@@ -24,15 +24,12 @@ Synthesis rules are based on empirical observations from the [PepFun](https://gi
 
 **Inputs:**
 
-  - AMPSphere_v.2022-03.faa.gz:	Fasta of AMPSphere peptides
-  
-  - SPHERE_v.2022-03.levels_assessment.tsv.gz:	Table containing the association of AMPs and their families in AMPSphere
-
-  - high_quality_candidates.txt:	AMP candidates with experimental evidence of translation/transcription and passing in all 
-  other tests (Antifam, Terminal placement, RNACode)
-
-  - quality_candidates.txt:	AMP candidates without experimental evidence of translation/transcription and passing in all 
-  other tests (Antifam, Terminal placement, RNACode)
+| **Input file** | **Description** |
+| :---: | :---: |
+| AMPSphere_v.2022-03.faa.gz | Fasta of AMPSphere peptides |
+| SPHERE_v.2022-03.levels_assessment.tsv.gz | Table containing the association of AMPs and their families in AMPSphere
+| high_quality_candidates.txt | AMP candidates with experimental evidence of translation/transcription and passing in all other tests (Antifam, Terminal placement, RNACode) |
+| quality_candidates.txt | AMP candidates without experimental evidence of translation/transcription and passing in all other tests (Antifam, Terminal placement, RNACode) |
 
 
 **Outputs:**
@@ -53,12 +50,11 @@ Results are organized as three tables, they both contain the same columns:
 | syn_rule_3 | Synthesis rule 3 |
 | fam | SPHERE family at level III |
 
-Tables:
+*Tables:*
 
-  - AMPSphere_v.2022-03.solsyn_rules.tsv.gz:	contains all peptides from AMPSphere and their assessment regarding solubility and synthesis
-  
-  - AMPSphere_v.2022-03.selected_candidates.tsv:	contains only quality controlled peptides from AMPSphere and their assessment regarding sol. and synthesis
-  
-  - selected_candidates.tsv:	table contains the candidates suggested for synthesis given their superior results, this table contains an additional column
-  FScore which consists in the geometric mean of the percent of True results for synthesis and solubility, if it was above 60, then the candidate was selected.
+| **Output** | **Description** |
+| :---: | :---: |
+| AMPSphere_v.2022-03.solsyn_rules.tsv.gz | contains all peptides from AMPSphere and their assessment regarding solubility and synthesis
+| AMPSphere_v.2022-03.selected_candidates.tsv | contains only quality controlled peptides from AMPSphere and their assessment regarding sol. and synthesis
+| selected_candidates.tsv | contains the candidates suggested for synthesis given their superior results, this table contains an additional column FScore which consists in the geometric mean of the percent of True results for synthesis and solubility, if it was above 60, then the candidate was selected. |
 
