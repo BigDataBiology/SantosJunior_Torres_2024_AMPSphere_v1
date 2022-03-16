@@ -51,6 +51,8 @@ The folders outputted in *analysis/* folder are:
 
 		tree_fig - contains the ASCII images for each tree
 		
+		seqlogo - contains sequence logos for each alignment
+		
 	helical_wheels - it contains the image files in .svg format for the helical wheels built for each AMP in AMPSphere
 
 AMPSphere generation procedure outputs the following tables to the *analysis/* folder:
@@ -354,6 +356,10 @@ The scripts in *utils/* folder are explained below:
 	- gmsc_genes.py:         **Function.** Generate genes fasta for AMPSphere
 	                         **Inputs.** AMPsphere_GMSC_correspondence.tsv.gz, gmsc_genes.fna.xz
 	                         **Outputs.** AMPSphere_v.2022-03.fna.xz
+
+	- seqlogo.py:            **Function.** Generate sequence logos for each peptide alignment in families/aln folder
+	                         **Inputs.** Alignment files in families/aln/ automatically retrievied and listed
+	                         **Outputs.** PDF files in families/seqlogo/ folder, containing the sequence logo for each corresponding alignment.
 
 Detailed inputs list:
 

@@ -71,19 +71,19 @@ It contains the following columns:
     
 The scripts in *utils/* folder are explained below:
 
-	- download_files.py |  **Function.** downloads the set of inputs needed for the other scripts
+	- download_files.py:     **Function.** downloads the set of inputs needed for the other scripts
 	                         **Inputs.** No inputs are needed 
 	                         **Outputs.** Folder *data/* with diverse needed files (more details about the files below)
 
-	- gtdb2pgenomes.py |   **Function.** Generates a conversion mechanism from GTDB taxonomy into specI clusters based in the samples
+	- gtdb2pgenomes.py:      **Function.** Generates a conversion mechanism from GTDB taxonomy into specI clusters based in the samples
 	                         **Inputs.** Resources from GTDB (bac120_metadata_r202.tsv, ar122_metadata_r202.tsv) and from ProGenomes (progenomes_samples.tsv).
 	                         **Outputs.** Two tables: **(i)** gtdb_to_pgenomes.tsv (metadata of genomes in GTDB that can be converted into specI: "accession",
 	                         "checkm_marker_lineage", "gtdb_taxonomy", "ncbi_assembly_name", "ncbi_bioproject", "ncbi_biosample", "ncbi_organism_name",
 	                         "ncbi_taxid", "ncbi_taxonomy", "cluster"), and **(ii)** conv_pgen_to_gtdb_list.tsv (a complete association table of sample
-	                         and the lineage| columns: "ncbi biosample", "specI cluster", "Domain", "Phylum", "Class", "Order", "Family", "Genus",
-	                         and "Species")
+	                         and the lineage with the following columns: "ncbi biosample", "specI cluster", "Domain", "Phylum", "Class", "Order", "Family",
+	                         "Genus", and "Species")
 
-	- metadata.py |        **Function.** Reduces the metadata generated during sampling and convert the name of the environments to human-readable format
+	- metadata.py:           **Function.** Reduces the metadata generated during sampling and convert the name of the environments to human-readable format
 	                         **Inputs.** metadata.tsv and general_envo_names.tsv
 	                         **Outputs.** Generates the table reduced_metadata.tsv (columns: "sample_accession", "geographic_location", "latitude",
 	                         "longitude", "general envo name", "environment_material")
@@ -93,23 +93,22 @@ The scripts in *utils/* folder are explained below:
 	                         the Zenodo repository and the pre-computed resource from GMSC (GMSC10.ProGenomes2.coords.txt.gz)
 	                         **Outputs.** Table AMPSphere_ProGenomes2.tsv.gz (columns: AMP, GMSC10, genome, contig, start, stop)
 
-	- preprocess.py |      **Function.** Pre-process inputs from taxonomic annotation using GTDB, gene predicition and AMP classification. 
+	- preprocess.py:         **Function.** Pre-process inputs from taxonomic annotation using GTDB, gene predicition and AMP classification. 
 	                         **Inputs.** Pre-computed for GTDB contigs annotation (mmseqs2.lca_taxonomy.full.tsv.xz),
 	                         gene prediction in GMSC (GMSC10.metag_smorfs.rename.txt.xz),
 	                         and AMPSphere files from Zenodo (AMPSphere_v.2021-03.fna.xz,  AMPSphere_v.2021-03.origin_samples.tsv.gz)
 	                         **Outputs.** Tables: GMGCgenes, gmsc_genes_smorfs.txt, gmsc_metag_amps.tsv.gz,
 	                         amp_contigs_filtered_mmseqs2.lca_taxonomy.tsv.xz, gmsc_meta_taxo.tsv.gz
 
-	- addspecI.py |        **Function.** Add specI clusters into complete gene tables.
+	- addspecI.py:           **Function.** Add specI clusters into complete gene tables.
 	                         **Inputs.** gmsc_meta_taxo.tsv.gz and conv_pgen_to_gtdb_list.tsv
 	                         **Outputs.** Table complete_amps_associated_taxonomy.tsv.gz (columns: gmsc, amp, sample, contig, start, stop, strand, ID,
 	                         partial, start_type, rbs_motif, rbs_spacer, gc_cont, taxid, level, name, retainedassigned, agreement, support, specI)
 
-	- hr_envo.py |         **Function.** Add metadata to the pre-computed gene table and concatenate the genomes from metagenomes and progenomes.
+	- hr_envo.py:            **Function.** Add metadata to the pre-computed gene table and concatenate the genomes from metagenomes and progenomes.
 	                         **Inputs.** pre-computed files (AMPSphere_ProGenomes2.tsv.gz, complete_amps_associated_taxonomy.tsv.gz, reduced_metadata.tsv),
 	                         and progenomes resource (pgenomes_samples.tsv)
 	                         **Outputs.** It generates the three main tables previously described
-
 
 Detailed inputs list:
 

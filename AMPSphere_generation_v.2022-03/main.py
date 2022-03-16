@@ -7,6 +7,7 @@ from utils.cluster_analysis import process_cluster
 from utils.helical import helical_wheel
 from utils.metaG import metag
 from utils.gmsc_genes import genes
+from utils.seqlogo import make_seqlogo
 
 
 def main():
@@ -28,6 +29,8 @@ def main():
     process_cluster()
     print('Generate helical wheels per peptide')
     helical_wheel()
+    print('Generate sequence logos for each aln')
+    make_seqlogo()
 
 
 if __name__ == '__main__':
