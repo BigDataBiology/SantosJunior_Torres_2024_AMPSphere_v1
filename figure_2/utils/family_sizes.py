@@ -7,7 +7,7 @@ def family_size():
     from collections import Counter
 
     print('Load spheres')
-    amp_fam = pd.read_table('data/SPHERE_v.2021-03.levels_assessment.tsv.gz', sep='\t', header='infer')
+    amp_fam = pd.read_table('data/SPHERE_v.2022-03.levels_assessment.tsv.gz', sep='\t', header='infer')
     amp_fam = amp_fam[['AMP accession', 'SPHERE_fam level III']]
     amp_fam = amp_fam.rename({'AMP accession': 'amp',
                               'SPHERE_fam level III': 'family'},

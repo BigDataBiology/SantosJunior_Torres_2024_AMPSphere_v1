@@ -16,20 +16,20 @@ def inputsgen():
                      'data/pgenomes_samples.tsv'])
 
     # publicly available in the AMPSphere resource
-    print('downloading SPHERE_v.2021-03.levels_assessment.tsv.gz from Zenodo')
-    server = "zenodo.org"
-    address = "record/4606582/files"
-    finput = 'SPHERE_v.2021-03.levels_assessment.tsv.gz'
-    subprocess.call(['wget',
-                     f'https://{server}/{address}/{finput}?download=1',
-                     '--output-document',
-                     'data/SPHERE_v.2021-03.levels_assessment.tsv.gz'])
+    print('downloading SPHERE_v.2022-03.levels_assessment.tsv.gz')
+    server = "ubuntu@aws.big-data-biology.org"
+    address = "/share/work/Celio/AMPSphere/v2022_03/AMPSphere_generation_v.2022-03/analysis/"
+    finput = 'SPHERE_v.2022-03.levels_assessment.tsv.gz'
+    subprocess.call(['rsync',
+                     '-avzP',
+                     f'{server}:{address}/{finput}',
+                     'data/'])
     
     # generated during metadata analysis
     print('downloading the table gmsc_amp_genes_envohr_source.tsv')
     server = "ubuntu@aws.big-data-biology.org"
-    address = "/share/work/Celio/files_for_figures/mundi_map/"
-    finput = "gmsc_amp_genes_envohr_source.tsv"
+    address = "/share/work/Celio/AMPSphere/v2022_03/metadata_analysis/outputs/"
+    finput = "gmsc_amp_genes_envohr_source.tsv.gz"
     subprocess.call(['rsync',
                      '-avzP',
                      f'{server}:{address}/{finput}',
@@ -38,7 +38,7 @@ def inputsgen():
     # generated during Figure S1 quality analysis
     print('downloading quality families')
     server = "ubuntu@aws.big-data-biology.org"
-    address = "/share/work/Celio/files_for_figures/quality_control"
+    address = "/share/work/Celio/AMPSphere/v2022_03/figure_sup1/analysis/"
     finput = 'quality_families.txt'
     subprocess.call(['rsync',
                      '-avzP',
@@ -48,7 +48,7 @@ def inputsgen():
     # generated during Figure S1 quality analysis
     print('downloading quality_candidates')
     server = "ubuntu@aws.big-data-biology.org"
-    address = "/share/work/Celio/files_for_figures/quality_control"
+    address = "/share/work/Celio/AMPSphere/v2022_03/figure_sup1/analysis/"
     finput = 'quality_candidates.txt'
     subprocess.call(['rsync',
                      '-avzP',
@@ -58,7 +58,7 @@ def inputsgen():
     # generated during Figure S1 quality analysis
     print('downloading high_quality_candidates')
     server = "ubuntu@aws.big-data-biology.org"
-    address = "/share/work/Celio/files_for_figures/quality_control"
+    address = "/share/work/Celio/AMPSphere/v2022_03/figure_sup1/analysis/"
     finput = 'high_quality_candidates.txt'
     subprocess.call(['rsync',
                      '-avzP',
@@ -69,7 +69,7 @@ def inputsgen():
     # sequences
     print('downloading prevotella_species_list')
     server = "ubuntu@aws.big-data-biology.org"
-    address = "/share/work/Celio/files_for_figures/genes_origins/"
+    address = "/share/work/Celio/AMPSphere/v2022_03/figure_2/analysis/"
     finput = 'prevotella_species_list.tsv'
     subprocess.call(['rsync',
                      '-avzP',
@@ -88,12 +88,12 @@ def inputsgen():
                      'data/37185.fasta'])
 
     # generated during metadata analysis
-    print('downloading prevotella_species_list')
+    print('downloading the table complete_amps_associated_taxonomy.tsv.gz')
     server = "ubuntu@aws.big-data-biology.org"
-    address = "/share/work/Celio/files_for_figures/genes_origins/"
-    finput = 'complete_amps_associated_taxonomy.tsv.gz'
+    address = "/share/work/Celio/AMPSphere/v2022_03/metadata_analysis/data/"
+    finput = "complete_amps_associated_taxonomy.tsv.gz"
     subprocess.call(['rsync',
                      '-avzP',
                      f'{server}:{address}/{finput}',
                      'data/'])
-
+                     

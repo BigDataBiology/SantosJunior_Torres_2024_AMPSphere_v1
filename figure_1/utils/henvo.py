@@ -39,20 +39,20 @@ def heatmap_environments():
     wastewater = ['wastewater', 'activated sludge']
     
     print('loading data')
-    data = pd.read_table('data/gmsc_amp_genes_envohr_source.tsv',
+    data = pd.read_table('data/gmsc_amp_genes_envohr_source.tsv.gz',
                          sep='\t',
                          header='infer')
 
     # filtering data by environmental sets:
-    non_mammal = set(data[data['general envo name'].isin(non_mammalian_host)]['amp'])
-    mammal_gut = set(data[data['general envo name'].isin(mammalian_host_guts)]['amp'])
-    mammal_others = set(data[data['general envo name'].isin(mammalian_host_other)]['amp'])
-    built_environment = set(data[data['general envo name'].isin(built_environment)]['amp']) 
-    freshwater = set(data[data['general envo name'].isin(freshwater)]['amp'])
-    wastewater = set(data[data['general envo name'].isin(wastewater)]['amp']) 
-    plant_associated = set(data[data['general envo name'] == 'plant associated']['amp']) 
-    marine = set(data[data['general envo name'] == 'marine']['amp'])
-    soil = set(data[data['general envo name'] == 'soil']['amp']) 
+    non_mammal = set(data[data['general_envo_name'].isin(non_mammalian_host)]['amp'])
+    mammal_gut = set(data[data['general_envo_name'].isin(mammalian_host_guts)]['amp'])
+    mammal_others = set(data[data['general_envo_name'].isin(mammalian_host_other)]['amp'])
+    built_environment = set(data[data['general_envo_name'].isin(built_environment)]['amp']) 
+    freshwater = set(data[data['general_envo_name'].isin(freshwater)]['amp'])
+    wastewater = set(data[data['general_envo_name'].isin(wastewater)]['amp']) 
+    plant_associated = set(data[data['general_envo_name'] == 'plant associated']['amp']) 
+    marine = set(data[data['general_envo_name'] == 'marine']['amp'])
+    soil = set(data[data['general_envo_name'] == 'soil']['amp']) 
 
     # create dictionary of names by position
     posix_dic = {0: 'non_mammal',
@@ -67,7 +67,15 @@ def heatmap_environments():
 
     # computing intersections over pairs of environments
     matrix = [[],[],[],[],[],[],[],[],[]]
-    setlists = [non_mammal, mammal_gut, mammal_others, marine, soil, built_environment, freshwater, wastewater, plant_associated]
+    setlists = [non_mammal,
+                mammal_gut,
+                mammal_others,
+                marine,
+                soil,
+                built_environment,
+                freshwater,
+                wastewater,
+                plant_associated]
     for n, i in enumerate(setlists):
         matrix[n].append(posix_dic[n])
         for m, j in enumerate(setlists):
@@ -86,7 +94,12 @@ def heatmap_environments():
     mask[np.tril_indices_from(mask)] = True
 
     # plot heatmap
-    sns.heatmap(df.astype('int'), annot=True, cmap="YlOrBr", mask=mask, square=True)
+    sns.heatmap(df.astype('int'),
+                annot=True,
+                cmap="YlOrBr",
+                mask=mask, square=True)
     plt.tight_layout()
     plt.savefig('figure_1c_heatmap_environments_overlap.svg')
+    plt.close()
+    
 

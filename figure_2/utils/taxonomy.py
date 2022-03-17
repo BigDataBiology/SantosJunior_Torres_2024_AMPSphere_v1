@@ -24,7 +24,7 @@ def taxon_affiliation():
     data = pd.read_table('data/complete_amps_associated_taxonomy.tsv.gz', sep='\t', header='infer')
 
     # filter dataframe and drop duplicates
-    dd = data[['amp', 'level', 'name', 'specI']].drop_duplicates()
+    dd = data[['amp', 'level', 'source', 'specI']].drop_duplicates()
 
     # getting annotated AMPs 
     annotated_amps = dd[~dd['level'].isna()]
@@ -58,10 +58,10 @@ def taxon_affiliation():
 
     # convert dataframe of AMPs with annotated origins
     sp = data[(data['amp'].isin(selected_group)) & (data['level'].isin(['species', 'genus']))]
-    sp = sp[['amp', 'taxid', 'level', 'name']]
-    sp = sp.sort_values(by=['amp', 'taxid', 'name'])
+    sp = sp[['amp', 'taxid', 'level', 'source']]
+    sp = sp.sort_values(by=['amp', 'taxid', 'source'])
     sp = sp.drop_duplicates()
-    sp['fixed'] = [x.split(' ')[0] for x in sp.name.values]
+    sp['fixed'] = [x.split(' ')[0] for x in sp.source.values]
     sp.to_csv('taxonomy_annotation.tsv', sep='\t', header=True, index=None)
 
     ## finding AMPs annotated to more than 1 genus:

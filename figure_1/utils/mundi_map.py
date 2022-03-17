@@ -9,7 +9,7 @@ def plot_mundi_map():
     import matplotlib.pyplot as plt
 
     print('Import data')
-    input_file = 'data/gmsc_amp_genes_envohr_source.tsv'
+    input_file = 'data/gmsc_amp_genes_envohr_source.tsv.gz'
 
     data = pd.read_table(input_file,
                          sep='\t',
@@ -19,7 +19,9 @@ def plot_mundi_map():
     df = data[['latitude', 'longitude']]
     df = df.dropna()
     df = df.drop_duplicates()
-
+    df = df[(df.latitude != 'N.A.') & (df.longitude != 'N.A.')]
+    df = df.astype('float')
+    
     print('# generate background')
     countries = gpd.read_file(
         gpd.datasets.get_path("naturalearth_lowres"))
@@ -35,6 +37,7 @@ def plot_mundi_map():
             colormap="YlOrRd", s=0.5, ax=ax)
 
     print('# savefigure')
-    plt.savefig('figure_1a_metagenomes_samples_distribution.svg')
+    plt.savefig('figure_1a_metagenomes_samples_distribution.png',
+                dpi=1200)
     plt.close()
 

@@ -5,32 +5,38 @@ def inputsgen():
     print('generating datafolder')
     os.makedirs('data/', exist_ok=True)
 
+    # generated during metadata analysis
     print('downloading the table gmsc_amp_genes_envohr_source.tsv')
     server = "ubuntu@aws.big-data-biology.org"
-    address = "/share/work/Celio/files_for_figures/mundi_map/"
-    finput = "gmsc_amp_genes_envohr_source.tsv"
+    address = "/share/work/Celio/AMPSphere/v2022_03/metadata_analysis/outputs/"
+    finput = "gmsc_amp_genes_envohr_source.tsv.gz"
     subprocess.call(['rsync',
                      '-avzP',
                      f'{server}:{address}/{finput}',
                      'data/'])
                  
-    print('downloading AMPSphere_v.2021-03.faa.gz from Zenodo')
-    server = "zenodo.org"
-    address = "record/4606582/files"
-    finput = 'AMPSphere_v.2021-03.faa.gz'
-    subprocess.call(['wget',
-                     f'https://{server}/{address}/{finput}?download=1',
-                     '--output-document',
-                     'data/AMPSphere_v.2021-03.faa.gz'])
+    # publicly available in the AMPSphere resource
+    print('downloading AMPSphere_v.2022-03.faa.gz')
+    server = "ubuntu@aws.big-data-biology.org"
+    address = "/share/work/Celio/AMPSphere/v2022_03/AMPSphere_generation_v.2022-03/analysis/"
+    finput = 'AMPSphere_v.2022-03.faa.gz'
+    subprocess.call(['rsync',
+                     '-avzP',
+                     f'{server}:{address}/{finput}',
+                     'data/'])
 
+    # publicly available in different databases
     print('downloading databases for homology search')
     server = "ubuntu@aws.big-data-biology.org"
-    address = "/share/work/Celio/files_for_figures/databases_homology"
+    address = "/share/work/Celio/AMPSphere/v2022_03/figure_1/data/databases_homology"
     subprocess.call(['rsync',
                      '-avzP',
                      f'{server}:{address}',
                      'data/'])
-
+    
+    os.remove('data/databases_homolgy/converter')
+    
+    # GMGC resource
     print('downloading GMGC')
     ask = input('Do you want to download the GMGC catalog? It may consume much space! (y/n)')
     if (ask == 'Y') or (ask == 'y'):
@@ -41,10 +47,11 @@ def inputsgen():
                          '-avzP',
                          f'{server}:{address}/{finput}',
                          'data/databases_homology/'])
-
+    
+    # from the AMPSphere resource, generated during computations for Sup. Fig. 1
     print('downloading quality_candidates')
     server = "ubuntu@aws.big-data-biology.org"
-    address = "/share/work/Celio/files_for_figures/quality_control"
+    address = "/share/work/Celio/AMPSphere/v2022_03/figure_sup1/analysis/"
     infile = ['quality_candidates.txt', 'high_quality_candidates.txt']
     for i in infile:
         subprocess.call(['rsync',

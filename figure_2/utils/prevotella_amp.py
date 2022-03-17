@@ -14,9 +14,9 @@ def prevotella():
     
     # clean data and select only prevotella
     # species already isolated and described
-    ds = data[['amp', 'fixed', 'name']]
-    ds = ds[(ds.name.str.contains('Prevotella ')) & (~ds.name.str.contains('Prevotella sp'))]
-    ds = ds.sort_values(by='name')
+    ds = data[['amp', 'fixed', 'source']]
+    ds = ds[(ds.source.str.contains('Prevotella ')) & (~ds.source.str.contains('Prevotella sp'))]
+    ds = ds.sort_values(by='source')
 
     # prevotella_species_list was manually curated and is available after input download
     pspecies = pd.read_table('data/prevotella_species_list.tsv')
@@ -25,7 +25,7 @@ def prevotella():
     # counts prevotella unique AMPs
     pspecies_amps = []
     for ps in pspecies_list:
-        amps = len(ds[ds.name.str.contains(ps)]['amp'].drop_duplicates())
+        amps = len(ds[ds.source.str.contains(ps)]['amp'].drop_duplicates())
         print(f'{ps}\t{amps}')
         pspecies_amps.append(amps)
 

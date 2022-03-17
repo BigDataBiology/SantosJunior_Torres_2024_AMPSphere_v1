@@ -3,7 +3,7 @@ def mmseqs(db, finput, output):
     Performs mmseqs searching
     '''
     import subprocess
-    format=['query', 'target', 'evalue',
+    formlist=['query', 'target', 'evalue',
             'gapopen', 'pident', 'nident',
             'qstart', 'qend', 'qlen',
             'tstart', 'tend', 'tlen',
@@ -19,7 +19,7 @@ def mmseqs(db, finput, output):
                     output,
                     'tmp',
                     '--format-output',
-                    ','.join(format)])
+                    ','.join(formlist)])
 
                     
 def search_homologs():
@@ -27,15 +27,15 @@ def search_homologs():
     Queries AMPSphere against different databases
     '''
     import os
-    os.makedirs('homologs', exist_ok=True)
+    os.makedirs('analysis/homologs', exist_ok=True)
     outputs = {'DRAMP.fa': 'result_dramp.m8',
                'all_SmProt.fa.gz': 'result_SmProt.m8',
                'starPepDB.fasta': 'result_starPepDB.m8',
                'STsORFs.faa': 'result_STsORFs.m8'}
     for db, output in outputs.items():
         mmseqs(f'data/databases_homology/{db}',
-               'data/AMPSphere_v.2021-03.faa.gz',
-               f'homologs/{output}')
+               'data/AMPSphere_v.2022-03.faa.gz',
+               f'analysis/homologs/{output}')
 
 
 def batch_iterator(iterator, batch_size):
@@ -84,26 +84,22 @@ def split_GMGC10():
         print(f'Wrote {count} records to {filename}')
 
 
-def search_GMGC():
+def search_GMGC(ask):
     '''
     Performs the searching of AMPSphere against GMGC
     or in case user preferes, it can just skip this 
     process and retrieve the pre-computed resource
+
+    :input: ask - str. Y or N to use the pre-computed
+                  resource
     '''
     import os
     import glob
     import lzma
     import subprocess
     import pandas as pd
-    
-    ask = input('''
-    GMGC search takes much time and consumes much memory. 
-    Because of that, we made available pre-computed results, if you prefer.
-    In case you want to skip the homologs search in GMGC answer y,
-    in the opposite case, reply with n.
-    ''')
-    
-    format=['query', 'target', 'evalue',
+       
+    formlist=['query', 'target', 'evalue',
         'gapopen', 'pident', 'nident',
         'qstart', 'qend', 'qlen',
         'tstart', 'tend', 'tlen',
@@ -117,14 +113,14 @@ def search_GMGC():
         print('Splitting the large GMGC file into small chunks')
         split_GMGC10()
 
-        outdir = 'homologs/gmgc/'
+        outdir = 'analysis/homologs/gmgc/'
         os.makedirs(outdir, exist_ok=True)
 
         for chunk in glob.glob('data/databases_homology/gmgc_chunks/*.fasta'):            
             outfile = chunk.split('/')[-1].replace('.fasta', '.m8')
             subprocess.call(['mmseqs',
                              'easy-search',
-                             'data/AMPSphere_v.2021-03.faa.gz',
+                             'data/AMPSphere_v.2022-03.faa.gz',
                              chunk,    
                              f'{outdir}/{outfile}',
                              'tmp',
@@ -132,32 +128,29 @@ def search_GMGC():
                              '--db-load-mode 3',
                              '--threads 3',
                              '--format-output',
-                             ','.join(format)])
+                             ','.join(formlist)])
 
         df = pd.DataFrame()
-        for chunk in glob.glob('outdir/*.m8'):            
+        for chunk in glob.glob(f'{outdir}/*.m8'):            
             dint = pd.DataFrame(chunk, sep='\t', header=None)
             dint = dint[dint[2] <= 1e-5]            
             df = pd.concat([df, dint])
             
-        df.to_csv('homologs/truepep_gmgc_progenomes.m8',
+        df.to_csv('analysis/homologs/result_gmgc.m8',
                   sep='\t',
                   header=None,
                   index=None) 
 
-        os.remove('homologs/gmgc')
+        os.remove('analysis/homologs/gmgc')
         os.remove('data/databases_homology/gmgc_chunks')
         
     if (ask == 'Y') or (ask == 'y'):
-        os.rename('data/databases_homology/truepep_gmgc_progenomes.m8.xz',
-                  'homologs/gmgc.m8.xz')
-
-        with lzma.open('homologs/gmgc.m8.xz', 'rt', encoding='utf-8') as infile:
-            with open('homologs/gmgc.m8', 'w') as ofile:
+        with  lzma.open('data/databases_homology/true_pep_2022_vs_progenomesgmgc.tsv.xz',
+                        'rt',
+                        encoding='utf-8') as infile:
+            with open('analysis/homologs/result_gmgc.m8', 'w') as ofile:
                 for row in infile:
                     ofile.write(row)
-
-        os.remove('homologs/gmgc.m8.xz')
 
 
 def compare_hits():
@@ -170,7 +163,7 @@ def compare_hits():
     ofile = open('panelB_homologs_search.txt', 'a')
 
     all_candidates = set()
-    for chunk in glob.glob('homologs/*.m8'):             
+    for chunk in glob.glob('analysis/homologs/*.m8'):             
         homologs = pd.read_table(chunk, header=None)
         homologs = homologs[homologs[2] <= 1e-5][0]
         homologs = set(homologs)
@@ -179,13 +172,18 @@ def compare_hits():
         oname = oname.replace('.m8', '')
         oname = oname.replace('result_', '')
         homologs = pd.DataFrame.from_dict(homologs)
-        homologs.to_csv(f'homologs/{oname}_candidates.txt',
+        homologs.to_csv(f'analysis/homologs/{oname}_candidates.txt',
                         header=None,
                         index=None)
         print(f'It was detected in {oname}: {len(homologs)} AMPs with homologs',
               file=ofile)
 
     ofile.close()
+
+    homologs = pd.DataFrame.from_dict(all_candidates)
+    homologs.to_csv(f'analysis/homologs/annotated_candidates.txt',
+                    header=None,
+                    index=None)
 
     return all_candidates
 
@@ -219,9 +217,24 @@ def overlaps(all_candidates):
 
     ofile.close()
     
+    
 def homologs():
+    import os
+    from .timeout_input import timeout_input
+    
+    
+    print('Diverse db searching')
     search_homologs()
-    search_GMGC()
+    print('')
+    t, answ = timeout_input('''
+    GMGC search takes much time and consumes much memory. 
+    Because of that, we made available pre-computed results, if you prefer.
+    In case you want to skip the homologs search in GMGC answer y,
+    in the opposite case, reply with n.''', 5, 'y')
+    search_GMGC(answ)
+    print('Getting all candidates')
     all_candidates = compare_hits()
+    print('Generating numbers for Venns Diagram')
     overlaps(all_candidates)
+    os.remove('tmp/')
         

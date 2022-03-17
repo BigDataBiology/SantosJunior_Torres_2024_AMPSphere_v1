@@ -34,12 +34,12 @@ def linksource():
     columns to this analysis
     '''
     # linking to the source resource
-    refdata = pd.read_table('data/gmsc_amp_genes_envohr_source.tsv',
+    refdata = pd.read_table('data/gmsc_amp_genes_envohr_source.tsv.gz',
                             sep='\t',
                             header='infer')
 
     refdata = refdata[refdata.is_metagenomic == False]
-    refdata = refdata[refdata.specI != '*']
+    refdata = refdata[~(refdata.specI.isin(['*', 'N.A.']))]
     refdata = refdata[['amp','sample','specI']]
     refdata = refdata.sort_values(by=['amp', 'sample'])
     refdata = refdata.drop_duplicates()
@@ -54,7 +54,7 @@ def famp_analysis(spec_size, refdata):
     '''
     
     # creating a dictionary of AMPs to families
-    spheres = pd.read_table('data/SPHERE_v.2021-03.levels_assessment.tsv.gz',
+    spheres = pd.read_table('data/SPHERE_v.2022-03.levels_assessment.tsv.gz',
                             sep='\t',
                             header='infer')
     spheres = spheres[['AMP accession', 'SPHERE_fam level III']]
@@ -78,7 +78,7 @@ def famp_analysis(spec_size, refdata):
         f = df[0]
         D = dict(Counter(df[1].specI))
         for k, v in D.items():
-            if spec_size[k] >= 10:
+            if spec_size.get(k, 0) >= 10:
                 nv = v * 100 / spec_size[k]
                 total = spec_size[k]
                 ofile.write(f'{f}\t{k}\t{v}\t{total}\t{nv}\t{classificationprop(nv)}\n')
@@ -98,7 +98,7 @@ def famp_analysis(spec_size, refdata):
         f = df[0]
         D = dict(Counter(df[1].specI))
         for k, v in D.items():
-            if spec_size[k] >= 10:
+            if spec_size.get(k, 0) >= 10:
                 nv = v * 100 / spec_size[k]
                 total = spec_size[k]
                 ofile.write(f'{f}\t{k}\t{v}\t{total}\t{nv}\t{classificationprop(nv)}\n')
@@ -127,7 +127,7 @@ def plot_core():
     core()
     
     # load data
-    data = pd.read_table('data/SPHERE_v.2021-03.levels_assessment.tsv.gz')
+    data = pd.read_table('data/SPHERE_v.2022-03.levels_assessment.tsv.gz')
     
     # define minimum size of a family as 8 AMPs to be plotted 
     minsizedfam = [k for k,v in Counter(data['SPHERE_fam level III']).items() if v >= 8]
