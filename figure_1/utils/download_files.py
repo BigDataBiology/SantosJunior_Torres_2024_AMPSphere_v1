@@ -34,7 +34,14 @@ def inputsgen():
                      f'{server}:{address}',
                      'data/'])
     
-    os.remove('data/databases_homolgy/converter')
+    # moving files from inside folders
+    # substituting internal soflinks
+    truepep = 'true_pep_2022_vs_progenomesgmgc.tsv.xz'
+    conver = 'data/databases_homology/converter'
+    os.remove(f'data/databases_homology/{truepep}')
+    os.rename(f'{conver}/analysis/{truepep}',
+              f'data/databases_homology/{truepep}')              
+    os.remove(conver)
     
     # GMGC resource
     print('downloading GMGC')
