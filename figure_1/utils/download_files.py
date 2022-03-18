@@ -1,6 +1,7 @@
 def inputsgen():
     import subprocess
     import os
+    import shutil
 
     print('generating datafolder')
     os.makedirs('data/', exist_ok=True)
@@ -41,7 +42,7 @@ def inputsgen():
     os.remove(f'data/databases_homology/{truepep}')
     os.rename(f'{conver}/analysis/{truepep}',
               f'data/databases_homology/{truepep}')              
-    os.remove(conver)
+    shutil.rmtree(conver)
     
     # GMGC resource
     print('downloading GMGC')
