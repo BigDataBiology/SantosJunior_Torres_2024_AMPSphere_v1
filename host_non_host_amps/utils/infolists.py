@@ -1,0 +1,47 @@
+mammal = ['bat gut', 'bear gut',
+          'cat gut', 'cattle associated',
+          'cattle gut', 'cattle rumen',
+          'coyote gut', 'deer gut',
+          'dog associated', 'dog gut',
+          'fisher gut', 'goat gut',
+          'goat rumen', 'guinea pig gut',
+          'horse gut', 'human associated',
+          'human digestive tract', 'human gut',
+          'human mouth', 'human respiratory tract',
+          'human saliva', 'human skin',
+          'human urogenital tract',
+          'mouse gut', 'pig gut',
+          'primate gut', 'rabbit gut',
+          'rat gut', 'rodent gut']
+
+plant = ['algae associated',
+         'plant associated']
+
+nonmammal = ['annelidae associated', 'beatle gut',
+             'bee gut', 'bird gut', 'bird skin',
+             'chicken gut', 'coral associated',
+             'crustacean associated', 'crustacean gut',    
+             'fish gut', 'insect associated',
+             'insect gut', 'mollusc associated',
+             'mussel associated', 'planarian associated',
+             'ship worm associated', 'sponge associated',
+             'termite gut',    
+             'tunicate associated',
+             'wasp gut']
+
+environmental = ['activated sludge', 'air',
+                 'anthropogenic',
+                 'built environment',
+                 'extreme pH', 'fermented food',    
+                 'food', 'groundwater',
+                 'hot spring associated',
+                 'ice associated',
+                 'lake associated', 'marine',
+                 'mine', 'mock community',
+                 'pond associated',    
+                 'river associated',
+                 'sediment', 'soil',
+                 'thermal vent associated',
+                 'wastewater',
+                 'water associated']
+
