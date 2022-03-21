@@ -15,13 +15,13 @@ def heatmap_mammal_guts():
                          header='infer')
 
     print('# getting AMP lists for each host')
-    human_gut = set(data[data['general envo name'].isin(['human gut'])]['amp'].tolist())
-    pig_gut = set(data[data['general envo name'].isin(['pig gut'])]['amp'].tolist())
-    chicken_gut = set(data[data['general envo name'].isin(['chicken gut'])]['amp'].tolist())
-    mouse_gut = set(data[data['general envo name'].isin(['mouse gut'])]['amp'].tolist())
-    dog_gut = set(data[data['general envo name'].isin(['dog gut'])]['amp'].tolist())
-    cat_gut = set(data[data['general envo name'].isin(['cat gut'])]['amp'].tolist())
-    bovine_gut = set(data[data['general envo name'].isin(['cattle gut'])]['amp'].tolist())
+    human_gut = set(data[data['general_envo_name'].isin(['human gut'])]['amp'].tolist())
+    pig_gut = set(data[data['general_envo_name'].isin(['pig gut'])]['amp'].tolist())
+    chicken_gut = set(data[data['general_envo_name'].isin(['chicken gut'])]['amp'].tolist())
+    mouse_gut = set(data[data['general_envo_name'].isin(['mouse gut'])]['amp'].tolist())
+    dog_gut = set(data[data['general_envo_name'].isin(['dog gut'])]['amp'].tolist())
+    cat_gut = set(data[data['general_envo_name'].isin(['cat gut'])]['amp'].tolist())
+    bovine_gut = set(data[data['general_envo_name'].isin(['cattle gut'])]['amp'].tolist())
 
     # stating hosts
     posix_dic = {0: 'human_gut',
@@ -46,16 +46,16 @@ def heatmap_mammal_guts():
     df.columns = posix_dic.values()
     df = df.astype('int')
 
-    # converting overlap df into percent
-    df = df * 100 / df.max()
-    df = df.astype('int')
-
     # creat mask of zeros
     mask = np.zeros_like(df)
     mask[np.tril_indices_from(mask)] = True
 
     # plot heatmap
-    sns.heatmap(df, annot=True, cmap='YlOrBr', mask=mask, square=True)
+    sns.heatmap(df,
+                annot=False,
+                cmap='YlOrBr',
+                mask=mask,
+                square=True)
     plt.tight_layout()
     plt.savefig('figure_S1d_heatmap_mammalguts_overlap.svg')
     

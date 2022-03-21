@@ -55,9 +55,6 @@ def heatmap_bodysites():
     df.columns = posix_dic.values()
     df = df.astype('int')
 
-    # convert overlap into percent
-    df = df * 100 / df.max()
-
     # creating mask of zeros
     mask = np.zeros_like(df)
     mask[np.tril_indices_from(mask)] = True
@@ -65,7 +62,7 @@ def heatmap_bodysites():
     # plot heatmap
     print('creating heatmaps')
     sns.heatmap(df.astype('int'),
-                annot=True,
+                annot=False,
                 cmap="YlOrBr",
                 mask=mask,
                 square=True)
