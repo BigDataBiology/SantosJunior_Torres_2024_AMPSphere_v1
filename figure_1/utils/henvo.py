@@ -54,16 +54,15 @@ def heatmap_environments():
     marine = set(data[data['general_envo_name'] == 'marine']['amp'])
     soil = set(data[data['general_envo_name'] == 'soil']['amp']) 
 
-    # create dictionary of names by position
-    posix_dic = {0: 'non_mammal',
-                 1: 'mammal_gut',
-                 2: 'mammal_others',
-                 3: 'marine',
-                 4: 'soil',
-                 5: 'built_environment',
-                 6: 'freshwater',
-                 7: 'wastewater',
-                 8: 'plant_associated'}
+    categories = ['non_mammal',
+                 'mammal_gut',
+                 'mammal_others',
+                 'marine',
+                 'soil',
+                 'built_environment',
+                 'freshwater',
+                 'wastewater',
+                 'plant_associated']
 
     # computing intersections over pairs of environments
     matrix = [[],[],[],[],[],[],[],[],[]]
@@ -77,13 +76,13 @@ def heatmap_environments():
                 wastewater,
                 plant_associated]
     for n, i in enumerate(setlists):
-        matrix[n].append(posix_dic[n])
+        matrix[n].append(categories[n])
         for m, j in enumerate(setlists):
             matrix[n].append(len(i.intersection(j)))
 
     # convert overlap info into a dataframe
     df = pd.DataFrame(np.array(matrix)).set_index(0)
-    df.columns = posix_dic.values()
+    df.columns = categories
     df = df.astype('int')
 
     # create mask of zeros
