@@ -2,7 +2,7 @@
 
 Brings all code needed to regenerate AMPSphere resource:
 
-[AMPSphere_generation_v.2022-03](AMPSphere_generation_v.2022-03/README)
+[AMPSphere_generation_v.2022-03](AMPSphere_generation_v.2022-03/README.md)
 
     Folder used to regenerate AMPSphere from the base files
     
