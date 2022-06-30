@@ -6,7 +6,7 @@ def taxanalysis():
     from scipy.stats import mannwhitneyu
     from statsmodels.stats.multitest import multipletests
     
-    data = pd.read_table('normalized_amps_per_bp_per_taxon.tsv.xz')
+    data = pd.read_table('data/amps_per_assembled_Gbp_per_taxon.tsv.xz')
     data.rename({'fixed': 'genus'}, axis=1, inplace=True)
     
     tax = pd.read_table("data/bac120_GTDB.tsv.xz",
@@ -24,7 +24,7 @@ def taxanalysis():
     
     k = data.groupby('phylum').agg('size').sort_values().tail(13).index  # only phyla with 100 genera or more
     fdata = data[data.phylum.isin(k)].sort_values(by='phylum')
-    fdata = fdata[fdata.VAR_pct <= 100]
+#    fdata = fdata[fdata.VAR_pct <= 100]
     porder = ['p__Planctomycetota', 'p__Bacteroidota', 'p__Chloroflexota',
               'p__Desulfobacterota', 'p__Verrucomicrobiota', 'p__Cyanobacteria',
               'p__Myxococcota', 'p__Acidobacteriota', 'p__Patescibacteria',
@@ -69,7 +69,7 @@ def taxanalysis():
                                              is_sorted=False,
                                              returnsorted=False)
     
-    test = test[test['p-value'] < 5e-2]
+#    test = test[test['p-value'] < 5e-2]
     test.to_csv('taxonomy_test_ampspergbp.tsv',
                 sep='\t',
                 header=True,

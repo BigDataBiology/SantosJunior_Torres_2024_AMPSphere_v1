@@ -59,6 +59,24 @@ def load_data():
     s = tmp.sample(10_000).copy()
     s = s.reset_index(drop=True)
     s['Identity'] = [classify(x) for x in s.pident]
+
+    print('# histogram of pct_start')
+    import seaborn as sns
+    import matplotlib.pyplot as plt
+    df = pd.DataFrame()
+    for r in gmgc.groupby('query'):
+        r = r[1].sort_values()
+        r = r.head(1)
+        df = pd.concat([df, r])
+    
+    sns.histplot(data=df, x='pct_start', bins=100)
+    plt.xlabel('Match start (% of target length)')
+    plt.ylabel('Counts')
+    plt.savefig('pct_start.svg')
+    
+    f = len(df[(df.pct_start <= 25)|(df.pct_start >= 75)])*100/len(df)
+    print(f'{f:.2}% of hits begin in the initial or final 25% of target protein')
+    
     return s, fpart
     
 
@@ -112,7 +130,7 @@ def gmgc_plot2(s):
     axarr.set_xlim(0, 100)
     axarr.set_yticks([])
     fig.savefig('homologs_matchstart.svg')
-    
+
 
 def classify(x):
     if 0 < x <= 25: return '0-25%'

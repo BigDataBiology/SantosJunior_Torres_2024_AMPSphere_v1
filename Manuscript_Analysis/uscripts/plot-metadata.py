@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 
 from matplotlib import cm
 from scipy import stats
-from itertools import permutations
+from itertools import combinations
 from statsmodels.stats.multitest import multipletests
 
 plt.rcParams['svg.fonttype'] = 'none'
@@ -48,8 +48,37 @@ higher_level = {'sediment' : 'other',
         'built environment' : 'anthropogenic',
         'human gut' : 'human gut',
         'anthropogenic': 'anthropogenic',
-        'bear gut' : 'mammal gut'}
-
+        'bear gut' : 'mammal gut',
+        'pond associated': 'aquatic',
+        'bee gut': 'other animal',
+        'bat gut': 'mammal gut',
+        'dog associated': 'other animal',
+        'cattle associated': 'other animal',
+        'crustacean associated': 'other animal',
+        'insect gut': 'other animal',
+        'goat gut': 'mammal gut', 
+        'rodent gut': 'mammal gut',
+        'fisher gut': 'mammal gut',
+        'human digestive tract': 'other human',
+        'coyote gut': 'mammal gut',
+        'planarian associated': 'other animal',
+        'sponge associated': 'other animal',
+        'goat rumen': 'other animal',
+        'crustacean gut': 'other animal',
+        'annelidae associated': 'other animal',
+        'bird skin': 'other animal',
+        'beatle gut': 'other animal',
+        'termite gut': 'other animal', 
+        'fish gut': 'other animal',
+        'mollusc associated': 'other animal',
+        'ship worm associated': 'other animal',
+        'rabbit gut': 'mammal gut',
+        'tunicate associated': 'other animal',
+        'mussel associated': 'other animal',
+        'horse gut': 'mammal gut',
+        'wasp gut': 'other animal',
+        'guinea pig gut': 'mammal gut'}
+        
 is_host_associated = {'human gut' : True,
         'soil/plant' : False,
         'aquatic' : False,
@@ -110,14 +139,12 @@ fig.savefig('samples_per_habitat.svg')
 samples = pd.read_table('data/samples-min500k-assembly-prodigal-stats.tsv.gz', index_col=0)
 gmsc = pd.read_table("data/gmsc_amp_genes_envohr_source.tsv.gz")
 gmsc = gmsc[gmsc.is_metagenomic == True]
-gmsc = gmsc[['amp', 'sample']].drop_duplicates().groupby('sample').agg('size')
+gmsc = gmsc.groupby('sample').agg('size')
 samples = pd.concat([samples, gmsc], axis=1).rename({0: 'ampsphere_amps'}, axis=1)
-
-for c in ['inserts_filtered', 'smORFs', 'assembly_total_length', 'ampsphere_amps']:
-    meta[c] = samples[c]
-
+meta = pd.concat([meta, samples], axis=1)
 meta['smorfs_per_assembly_mbps'] = meta.eval('1_000_000 * smORFs/assembly_total_length')
 meta['ampsphere_amps_per_assembly_mbps'] = meta.eval('1_000_000 * ampsphere_amps/assembly_total_length')
+meta = meta[~meta.ampsphere_amps.isna()]
 
 inserts_filtered = meta.groupby('general_envo_name').sum()['inserts_filtered']
 inserts_filtered = inserts_filtered.reindex(general.index)
@@ -149,19 +176,21 @@ assembly_total_length['other'] = meta['assembly_total_length'].sum() - assembly_
 meta['is_host_associated'] = meta['general_envo_name'].map(lambda c : is_host_associated[higher_level.get(c, 'other')])
 meta['is_host_associated'] = meta.is_host_associated.map(lambda i: 'host' if i else 'non-host')
 
-c_general_envo_name = meta['general_envo_name'].value_counts()
-sel = meta[meta.general_envo_name.map(lambda e: c_general_envo_name[e] >= 100)]
-sel = sel.query('assembly_total_length > 1_000_000')
-sel = sel.query('ampsphere_amps_per_assembly_mbps < 4')
-meta.groupby('general_envo_name').median()['ampsphere_amps_per_assembly_mbps'].sort_values().reindex(general.index).drop('other').sort_values()
+q1, q3 = meta.ampsphere_amps_per_assembly_mbps.quantile([0.25,0.75])
+iqr = q3-q1
+ll, ul = q1-(1.5*iqr), q3+(1.5*iqr)
+sel = meta[(meta.ampsphere_amps_per_assembly_mbps <= ul) & (meta.ampsphere_amps_per_assembly_mbps >= ll)]
+count_envo = sel['general_envo_name'].value_counts()
+count_envo = count_envo[count_envo >= 100]
+sel = sel[sel.general_envo_name.isin(count_envo.index)]  # at least 100 samples
 order = sel.groupby('general_envo_name').median()['ampsphere_amps_per_assembly_mbps'].sort_values().index
 
 sels = []
 for h in order:
     cur = sel[sel.general_envo_name == h]
-    sels.append(cur.sample(100, replace=True))
+    sels.append(cur.sample(100))
 
-sell2000=pd.concat(sels)
+sels=pd.concat(sels)
 
 fig,ax = plt.subplots()
 ax.set_xlim(-1,2)
@@ -171,14 +200,14 @@ sns.boxplot(x='is_host_associated',
         order=['host', 'non-host'],
         ax=ax,
         showfliers=False,
-        data=meta.sample(2000),
+        data=sel.sample(2000),
         color='white',
         )
 sns.swarmplot(x='is_host_associated',
         y='ampsphere_amps_per_assembly_mbps',
         order=['host', 'non-host'],
         ax=ax,
-        data=meta.sample(1000),
+        data=sel.sample(2000),
         s=3,
         )
 plt.xlabel('')
@@ -193,18 +222,17 @@ sns.boxplot(x='general_envo_name',
         #data=sell.loc[np.random.choice(sell.index, 2000)],
         color='white',
         showfliers=False,
-        data=sell2000)
+        data=sels)
 sns.swarmplot(x='general_envo_name',
         y='ampsphere_amps_per_assembly_mbps',
         hue='is_host_associated',
         order=order,
         ax=ax,
         #data=sell.loc[np.random.choice(sell.index, 2000)],
-        data=sell2000,
+        data=sels,
         s=2.0)
 
-for x in ax.get_xticklabels():
-    x.set_rotation(90)
+for x in ax.get_xticklabels(): x.set_rotation(90)
 
 ax.set_xlabel('Habitat')
 ax.set_ylabel('AMPs per assembled Mbp')
@@ -213,19 +241,39 @@ sns.despine(fig, trim=True)
 fig.savefig('ampsphere_amps_per_assembly_mbps.svg')
 fig.savefig('ampsphere_amps_per_assembly_mbps.png', dpi=150)
 
-sel = sel.query('higher == "anthropogenic"')
-sel.groupby('general_envo_name').mean()['ampsphere_amps_per_assembly_mbps'].sort_values()
-meta = meta[~meta.ampsphere_amps_per_assembly_mbps.isna()]
+x = sel.query('higher == "anthropogenic"')
+x.groupby('general_envo_name').mean()['ampsphere_amps_per_assembly_mbps'].sort_values()
+
+u, p = stats.mannwhitneyu(sel[sel.is_host_associated == 'host']['ampsphere_amps_per_assembly_mbps'],
+                          sel[sel.is_host_associated == 'non-host']['ampsphere_amps_per_assembly_mbps'])
+
+print(f'Host vs. non-host > Mann-WhitneyU = {u}, p-value = {p}')                          
 
 sps = ['human gut', 'cat gut', 'dog gut', 'chicken gut', 'pig gut', 'cattle gut', 'mouse gut', 'rat gut', 'primate gut']
 tests = []
-for s, sn in permutations(sps, 2):
-    u, p = stats.mannwhitneyu(meta[meta.general_envo_name == s]['ampsphere_amps_per_assembly_mbps'],
-                              meta[meta.general_envo_name == sn]['ampsphere_amps_per_assembly_mbps'])
+for s, sn in combinations(sps, 2):
+    u, p = stats.mannwhitneyu(sel[sel.general_envo_name == s]['ampsphere_amps_per_assembly_mbps'],
+                              sel[sel.general_envo_name == sn]['ampsphere_amps_per_assembly_mbps'])
     tests.append((s, sn, u, p))
 
 tests = pd.DataFrame(tests, columns=['s1', 's2', 'U', 'pval'])
 _, tests['p_adj'], _, _ = multipletests(tests['pval'], method='hs')
+
+#tests = tests[tests.p_adj < 0.05]
+
+tests = tests.groupby('p_adj')
+tests = tests.apply(lambda x: x.head(1))
+tests = tests.reset_index(drop=True)
+tests.loc[:, 's1'] = tests['s1'].str.replace('primate', 'non-human primate')
+tests.loc[:, 's2'] = tests['s2'].str.replace('primate', 'non-human primate')
+tests.rename({'s1': 'Species 1',
+              's2': 'Species 2',
+              'p_adj': 'Adjusted p-value'},
+             axis=1,
+             inplace=True)
+                          
+tests.drop('pval', axis=1, inplace=True)
+tests = tests.sort_values(by='Adjusted p-value')
 tests.to_csv('mannwhitneyu_test_mammalguts.tsv', sep='\t', header=True, index=None)
 
 c = sel.smorfs_per_assembly_mbps.copy()
