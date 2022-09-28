@@ -1,0 +1,1 @@
+../../docs/patents_diamond.tsv.xz.md

@@ -1,0 +1,1 @@
+../../data_folder/note_about_GMSC10.metag_smorfs.rename.sh

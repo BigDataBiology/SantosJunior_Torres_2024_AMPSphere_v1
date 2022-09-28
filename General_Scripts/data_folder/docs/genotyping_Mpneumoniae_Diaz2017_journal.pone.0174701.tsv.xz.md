@@ -1,0 +1,1 @@
+../../docs/genotyping_Mpneumoniae_Diaz2017_journal.pone.0174701.tsv.xz.md

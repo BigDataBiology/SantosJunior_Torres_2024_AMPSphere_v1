@@ -1,0 +1,1 @@
+../../data_folder/high_quality_candidates.txt

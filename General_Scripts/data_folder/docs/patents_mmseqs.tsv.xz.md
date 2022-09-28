@@ -1,0 +1,1 @@
+../../docs/patents_mmseqs.tsv.xz.md

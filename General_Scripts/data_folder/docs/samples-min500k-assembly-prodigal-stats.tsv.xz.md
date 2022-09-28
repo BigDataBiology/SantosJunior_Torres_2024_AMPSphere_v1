@@ -1,0 +1,1 @@
+../../docs/samples-min500k-assembly-prodigal-stats.tsv.xz.md
