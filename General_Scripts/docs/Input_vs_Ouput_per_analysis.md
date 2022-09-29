@@ -10,251 +10,251 @@ The description of files can be found in the links available.
 
 **01_resource_generation**
 
-	*Input*
+*Input*
         
-        [alph.json](alph.json.xz.md)
-        [AMPsphere_representatives.faa](AMPsphere_representatives.faa.xz.md)
-        [AMPSphere_v.2022-03.faa.gz](AMPSphere_v.2022-03.faa.gz.md)
-        [cmap.json](cmap.json.xz.md)
-        [combinedVsearch3.50p.20n.norm.opt.0.042.filteredBlackList.map](combinedVsearch3.50p.20n.norm.opt.0.042.filteredBlackList.map.xz.md)
-        [DRAMP.fa](DRAMP.fa.xz.md)
-        [dramp_anno.py](dramp_anno.py.xz.md)
-        [DRAMP_filter.raw.tsv](DRAMP_filter.raw.tsv.xz.md)
-        [GMSC10.Macrel_05.AMPs.tsv.gz](GMSC10.Macrel_05.AMPs.tsv.gz.md)
-        [GMSC10.ProGenomes2.coords.txt.gz](GMSC10.ProGenomes2.coords.txt.gz.md)
-        [GMSC10.proGenomesv2_05.AMPs.rename.tsv.gz](GMSC10.proGenomesv2_05.AMPs.rename.tsv.gz.md)
-        [gmsc_genes.fna.xz](gmsc_genes.fna.xz.md)
-        [metadata.tsv](metadata.tsv.xz.md)
-        [proGenomes2.1_specI_clustering.tab](proGenomes2.1_specI_clustering.tab.xz.md)
-        [proGenomes2.1_specI_lineageNCBI.tab](proGenomes2.1_specI_lineageNCBI.tab.xz.md)
-        [SPHERE_v.2022-03.levels_assessment.tsv.gz](SPHERE_v.2022-03.levels_assessment.tsv.gz.md)
+ - [alph.json](alph.json.xz.md)
+ - [AMPsphere_representatives.faa](AMPsphere_representatives.faa.xz.md)
+ - [AMPSphere_v.2022-03.faa.gz](AMPSphere_v.2022-03.faa.gz.md)
+ - [cmap.json](cmap.json.xz.md)
+ - [combinedVsearch3.50p.20n.norm.opt.0.042.filteredBlackList.map](combinedVsearch3.50p.20n.norm.opt.0.042.filteredBlackList.map.xz.md)
+ - [DRAMP.fa](DRAMP.fa.xz.md)
+ - [dramp_anno.py](dramp_anno.py.xz.md)
+ - [DRAMP_filter.raw.tsv](DRAMP_filter.raw.tsv.xz.md)
+ - [GMSC10.Macrel_05.AMPs.tsv.gz](GMSC10.Macrel_05.AMPs.tsv.gz.md)
+ - [GMSC10.ProGenomes2.coords.txt.gz](GMSC10.ProGenomes2.coords.txt.gz.md)
+ - [GMSC10.proGenomesv2_05.AMPs.rename.tsv.gz](GMSC10.proGenomesv2_05.AMPs.rename.tsv.gz.md)
+ - [gmsc_genes.fna.xz](gmsc_genes.fna.xz.md)
+ - [metadata.tsv](metadata.tsv.xz.md)
+ - [proGenomes2.1_specI_clustering.tab](proGenomes2.1_specI_clustering.tab.xz.md)
+ - [proGenomes2.1_specI_lineageNCBI.tab](proGenomes2.1_specI_lineageNCBI.tab.xz.md)
+ - [SPHERE_v.2022-03.levels_assessment.tsv.gz](SPHERE_v.2022-03.levels_assessment.tsv.gz.md)
 	
-	*Output*
+*Output*
 	
-        [SPHERE_v.2022-03.levels_assessment.tsv.gz](SPHERE_v.2022-03.levels_assessment.tsv.gz.md)
-        [AMPSphere_v.2022-03.fna.xz](AMPSphere_v.2022-03.fna.xz.md)
-        [AMPsphere_representatives.faa](AMPsphere_representatives.faa.xz.md)
-        [AMPSphere_v.2022-03.faa.gz](AMPSphere_v.2022-03.faa.gz.md)
-        [ampsphere_v2022-03.features.tsv.gz](ampsphere_v2022-03.features.tsv.gz.md)
-        [dramp_v3.features.tsv.gz](dramp_v3.features.tsv.gz.md)
-        [macrel_trainpos.features.tsv.gz](macrel_trainpos.features.tsv.gz.md)
+ - [SPHERE_v.2022-03.levels_assessment.tsv.gz](SPHERE_v.2022-03.levels_assessment.tsv.gz.md)
+ - [AMPSphere_v.2022-03.fna.xz](AMPSphere_v.2022-03.fna.xz.md)
+ - [AMPsphere_representatives.faa](AMPsphere_representatives.faa.xz.md)
+ - [AMPSphere_v.2022-03.faa.gz](AMPSphere_v.2022-03.faa.gz.md)
+ - [ampsphere_v2022-03.features.tsv.gz](ampsphere_v2022-03.features.tsv.gz.md)
+ - [dramp_v3.features.tsv.gz](dramp_v3.features.tsv.gz.md)
+ - [macrel_trainpos.features.tsv.gz](macrel_trainpos.features.tsv.gz.md)
 
 **02_motifs_annotation**
 
-	*Input*
+*Input*
         
-        [AMPSphere_v.2022-03.faa.gz](AMPSphere_v.2022-03.faa.gz.md)
-        [db_motif.tsv](db_motif.tsv.xz.md)
-        [environment_classification.py](environment_classification.py.xz.md)
-        [gmsc_amp_genes_envohr_source.tsv.gz](gmsc_amp_genes_envohr_source.tsv.gz.md)
-        [quality_families.txt](quality_families.txt.xz.md)
-        [SPHERE_v.2022-03.levels_assessment.tsv.gz](SPHERE_v.2022-03.levels_assessment.tsv.gz.md)
+ - [AMPSphere_v.2022-03.faa.gz](AMPSphere_v.2022-03.faa.gz.md)
+ - [db_motif.tsv](db_motif.tsv.xz.md)
+ - [environment_classification.py](environment_classification.py.xz.md)
+ - [gmsc_amp_genes_envohr_source.tsv.gz](gmsc_amp_genes_envohr_source.tsv.gz.md)
+ - [quality_families.txt](quality_families.txt.xz.md)
+ - [SPHERE_v.2022-03.levels_assessment.tsv.gz](SPHERE_v.2022-03.levels_assessment.tsv.gz.md)
 	
-	*Output*
+*Output*
 	
-        [AMPSphere_v.2022-03.annotation.tsv.gz](AMPSphere_v.2022-03.annotation.tsv.gz.md)
+ - [AMPSphere_v.2022-03.annotation.tsv.gz](AMPSphere_v.2022-03.annotation.tsv.gz.md)
 
 **03_clustering_significance**
 
-	*Input*
+*Input*
         
-        [AMPsphere_representatives.faa](AMPsphere_representatives.faa.xz.md)
-        [AMPSphere_v.2022-03.faa.gz](AMPSphere_v.2022-03.faa.gz.md)
-        [SPHERE_v.2022-03.levels_assessment.tsv.gz](SPHERE_v.2022-03.levels_assessment.tsv.gz.md)
+ - [AMPsphere_representatives.faa](AMPsphere_representatives.faa.xz.md)
+ - [AMPSphere_v.2022-03.faa.gz](AMPSphere_v.2022-03.faa.gz.md)
+ - [SPHERE_v.2022-03.levels_assessment.tsv.gz](SPHERE_v.2022-03.levels_assessment.tsv.gz.md)
 	
-	*Output*
+*Output*
 	
-        [output_clustering_significance_levelI.tsv.gz](output_clustering_significance_levelI.tsv.gz.md)
-        [output_clustering_significance_levelII.tsv.gz](output_clustering_significance_levelII.tsv.gz.md)
-        [output_clustering_significance_levelIII.tsv.gz](output_clustering_significance_levelIII.tsv.gz.md)
+ - [output_clustering_significance_levelI.tsv.gz](output_clustering_significance_levelI.tsv.gz.md)
+ - [output_clustering_significance_levelII.tsv.gz](output_clustering_significance_levelII.tsv.gz.md)
+ - [output_clustering_significance_levelIII.tsv.gz](output_clustering_significance_levelIII.tsv.gz.md)
 
 **04_metadata_analysis**
 
-	*Input*
+*Input*
         
-        [AMPSphere_v.2022-03.fna.xz](AMPSphere_v.2022-03.fna.xz.md)
-        [AMPSphere_v.2022-03.origin_samples.tsv.gz](AMPSphere_v.2022-03.origin_samples.tsv.gz.md)
-        [ar122_metadata_r202.tsv](ar122_metadata_r202.tsv.xz.md)
-        [bac120_metadata_r202.tsv](bac120_metadata_r202.tsv.xz.md)
-        [general_envo_names.tsv](general_envo_names.tsv.xz.md)
-        [GMSC10.metag_smorfs.rename.txt.xz](GMSC10.metag_smorfs.rename.txt.xz.md)
-        [GMSC10.ProGenomes2.coords.txt.gz](GMSC10.ProGenomes2.coords.txt.gz.md)
-        [metadata.tsv](metadata.tsv.xz.md)
-        [mmseqs2.lca_taxonomy.full.tsv.xz](mmseqs2.lca_taxonomy.full.tsv.xz.md)
-        [ncbi_missing_lineages.txt](ncbi_missing_lineages.txt.xz.md)
-        [proGenomes2.1_specI_clustering.tab](proGenomes2.1_specI_clustering.tab.xz.md)
-        [proGenomes2.1_specI_lineageNCBI.tab](proGenomes2.1_specI_lineageNCBI.tab.xz.md)	
+ - [AMPSphere_v.2022-03.fna.xz](AMPSphere_v.2022-03.fna.xz.md)
+ - [AMPSphere_v.2022-03.origin_samples.tsv.gz](AMPSphere_v.2022-03.origin_samples.tsv.gz.md)
+ - [ar122_metadata_r202.tsv](ar122_metadata_r202.tsv.xz.md)
+ - [bac120_metadata_r202.tsv](bac120_metadata_r202.tsv.xz.md)
+ - [general_envo_names.tsv](general_envo_names.tsv.xz.md)
+ - [GMSC10.metag_smorfs.rename.txt.xz](GMSC10.metag_smorfs.rename.txt.xz.md)
+ - [GMSC10.ProGenomes2.coords.txt.gz](GMSC10.ProGenomes2.coords.txt.gz.md)
+ - [metadata.tsv](metadata.tsv.xz.md)
+ - [mmseqs2.lca_taxonomy.full.tsv.xz](mmseqs2.lca_taxonomy.full.tsv.xz.md)
+ - [ncbi_missing_lineages.txt](ncbi_missing_lineages.txt.xz.md)
+ - [proGenomes2.1_specI_clustering.tab](proGenomes2.1_specI_clustering.tab.xz.md)
+ - [proGenomes2.1_specI_lineageNCBI.tab](proGenomes2.1_specI_lineageNCBI.tab.xz.md)	
         
-	*Output*
+*Output*
 	
-        [complete_amps_associated_taxonomy.tsv.gz](complete_amps_associated_taxonomy.tsv.gz.md)
-        [gmsc_amp_genes_envohr_source.tsv.gz](gmsc_amp_genes_envohr_source.tsv.gz.md)
+ - [complete_amps_associated_taxonomy.tsv.gz](complete_amps_associated_taxonomy.tsv.gz.md)
+ - [gmsc_amp_genes_envohr_source.tsv.gz](gmsc_amp_genes_envohr_source.tsv.gz.md)
         reduced_[metadata.tsv](metadata.tsv.xz.md).gz
 
 **05_clonality_and_quality**
 
-	*Input*
+*Input*
         
-        [AMPSphere_v.2022-03.faa.gz](AMPSphere_v.2022-03.faa.gz.md)
-        [AMPSphere_v.2022-03.fna.xz](AMPSphere_v.2022-03.fna.xz.md)
-        [antifam_100.tsv.gz](antifam_100.tsv.gz.md)
-        [coordinates_test_passed.tsv.gz](coordinates_test_passed.tsv.gz.md)
-        [DRAMP_annotation.raw.tsv](DRAMP_annotation.raw.tsv.xz.md)
-        [gmsc_amp_genes_envohr_source.tsv.gz](gmsc_amp_genes_envohr_source.tsv.gz.md)
-        [metaproteome_100.tsv.gz](metaproteome_100.tsv.gz.md)
-        [metaT_100.tsv.gz](metaT_100.tsv.gz.md)
-        [RNAcode_out_wlfam.tsv](RNAcode_out_wlfam.tsv.xz.md)
-        [SPHERE_v.2022-03.levels_assessment.tsv.gz](SPHERE_v.2022-03.levels_assessment.tsv.gz.md)
+ - [AMPSphere_v.2022-03.faa.gz](AMPSphere_v.2022-03.faa.gz.md)
+ - [AMPSphere_v.2022-03.fna.xz](AMPSphere_v.2022-03.fna.xz.md)
+ - [antifam_100.tsv.gz](antifam_100.tsv.gz.md)
+ - [coordinates_test_passed.tsv.gz](coordinates_test_passed.tsv.gz.md)
+ - [DRAMP_annotation.raw.tsv](DRAMP_annotation.raw.tsv.xz.md)
+ - [gmsc_amp_genes_envohr_source.tsv.gz](gmsc_amp_genes_envohr_source.tsv.gz.md)
+ - [metaproteome_100.tsv.gz](metaproteome_100.tsv.gz.md)
+ - [metaT_100.tsv.gz](metaT_100.tsv.gz.md)
+ - [RNAcode_out_wlfam.tsv](RNAcode_out_wlfam.tsv.xz.md)
+ - [SPHERE_v.2022-03.levels_assessment.tsv.gz](SPHERE_v.2022-03.levels_assessment.tsv.gz.md)
 
-	*Output*
+*Output*
 
-        [quality_assessment.tsv](quality_assessment.tsv.xz.md).gz
-        [high_[quality_candidates.txt](quality_candidates.txt.xz.md)](high_[quality_candidates.txt](quality_candidates.txt.xz.md).xz.md).gz
-        [quality_candidates.txt](quality_candidates.txt.xz.md).gz
-        [quality_families.txt](quality_families.txt.xz.md).gz
+ - [quality_assessment.tsv](quality_assessment.tsv.xz.md).gz
+ - [high_[quality_candidates.txt](quality_candidates.txt.xz.md)](high_[quality_candidates.txt](quality_candidates.txt.xz.md).xz.md).gz
+ - [quality_candidates.txt](quality_candidates.txt.xz.md).gz
+ - [quality_families.txt](quality_families.txt.xz.md).gz
 
 **06_rnacode_amp_families**
 
-	*Input*
+*Input*
         
-        [AMPSphere_v.2022-03.fna.xz](AMPSphere_v.2022-03.fna.xz.md)
-        [SPHERE_v.2022-03.levels_assessment.tsv.gz](SPHERE_v.2022-03.levels_assessment.tsv.gz.md)
+ - [AMPSphere_v.2022-03.fna.xz](AMPSphere_v.2022-03.fna.xz.md)
+ - [SPHERE_v.2022-03.levels_assessment.tsv.gz](SPHERE_v.2022-03.levels_assessment.tsv.gz.md)
 
-	*Output*
+*Output*
 
-        [RNAcode_out_wlfam.tsv](RNAcode_out_wlfam.tsv.xz.md)
+ - [RNAcode_out_wlfam.tsv](RNAcode_out_wlfam.tsv.xz.md)
 
 **07_homologs_and_overlap**
 
-	*Input*
+*Input*
         
-        [AMPSphere_v.2022-03.faa.gz](AMPSphere_v.2022-03.faa.gz.md)
-        [databases_homology](databases_homology.tar.xz.md)
-        [general_envo_names.tsv](general_envo_names.tsv.xz.md)
-        [gmsc_amp_genes_envohr_source.tsv.gz](gmsc_amp_genes_envohr_source.tsv.gz.md)
-        [high_[quality_candidates.txt](quality_candidates.txt.xz.md)](high_[quality_candidates.txt](quality_candidates.txt.xz.md).xz.md)
-        [metadata.tsv](metadata.tsv.xz.md)
-        [quality_assessment.tsv](quality_assessment.tsv.xz.md)
-        [quality_candidates.txt](quality_candidates.txt.xz.md)
+ - [AMPSphere_v.2022-03.faa.gz](AMPSphere_v.2022-03.faa.gz.md)
+ - [databases_homology](databases_homology.tar.xz.md)
+ - [general_envo_names.tsv](general_envo_names.tsv.xz.md)
+ - [gmsc_amp_genes_envohr_source.tsv.gz](gmsc_amp_genes_envohr_source.tsv.gz.md)
+ - [high_[quality_candidates.txt](quality_candidates.txt.xz.md)](high_[quality_candidates.txt](quality_candidates.txt.xz.md).xz.md)
+ - [metadata.tsv](metadata.tsv.xz.md)
+ - [quality_assessment.tsv](quality_assessment.tsv.xz.md)
+ - [quality_candidates.txt](quality_candidates.txt.xz.md)
 
-	*Output*
+*Output*
 
-        [adjust_significant_function.csv.xz](adjust_significant_function.csv.xz.md)
-        [amp_COG.tsv.xz](amp_COG.tsv.xz.md)
-        [dramp_candidates.txt.gz](dramp_candidates.txt.gz.md)
-        [gmgc_candidates.txt.gz](gmgc_candidates.txt.gz.md)
-        [SmProt_candidates.txt.gz](SmProt_candidates.txt.gz.md)
-        [starPepDB_candidates.txt.gz](starPepDB_candidates.txt.gz.md)
-        [STsORFs_candidates.txt.gz](STsORFs_candidates.txt.gz.md)
-        [result_gmgc.m8.xz](result_gmgc.m8.xz.md)
+ - [adjust_significant_function.csv.xz](adjust_significant_function.csv.xz.md)
+ - [amp_COG.tsv.xz](amp_COG.tsv.xz.md)
+ - [dramp_candidates.txt.gz](dramp_candidates.txt.gz.md)
+ - [gmgc_candidates.txt.gz](gmgc_candidates.txt.gz.md)
+ - [SmProt_candidates.txt.gz](SmProt_candidates.txt.gz.md)
+ - [starPepDB_candidates.txt.gz](starPepDB_candidates.txt.gz.md)
+ - [STsORFs_candidates.txt.gz](STsORFs_candidates.txt.gz.md)
+ - [result_gmgc.m8.xz](result_gmgc.m8.xz.md)
 
 **08_BGI_peptides**
 
-	*Input*
+*Input*
         
-        [AMPSphere_v.2022-03.faa.gz](AMPSphere_v.2022-03.faa.gz.md)
-        [BGI_peptides.faa](BGI_peptides.faa.xz.md)
+ - [AMPSphere_v.2022-03.faa.gz](AMPSphere_v.2022-03.faa.gz.md)
+ - [BGI_peptides.faa](BGI_peptides.faa.xz.md)
 
-	*Output*
+*Output*
 
-        [patents_blast.tsv](patents_blast.tsv.xz.md)
-        [patents_diamond.tsv](patents_diamond.tsv.xz.md)
-        [patents_mmseqs.tsv](patents_mmseqs.tsv.xz.md)
+ - [patents_blast.tsv](patents_blast.tsv.xz.md)
+ - [patents_diamond.tsv](patents_diamond.tsv.xz.md)
+ - [patents_mmseqs.tsv](patents_mmseqs.tsv.xz.md)
         matches/
 
 **09_taxonomy_core_analysis**
 
-	*Input*
+*Input*
         
-        [37185.fasta](37185.fasta.xz.md)
-        [bac120_r202.tre](bac120_r202.tre.xz.md)
-        [bac120_taxonomy_r202.tsv](bac120_taxonomy_r202.tsv.xz.md)
-        [bps-per-sample-per-taxon.tsv.xz](bps-per-sample-per-taxon.tsv.xz.md)
-        [bps-per-taxon.tsv.xz](bps-per-taxon.tsv.xz.md)
-        [complete_amps_associated_taxonomy.tsv.gz](complete_amps_associated_taxonomy.tsv.gz.md)
-        [gmsc_amp_genes_envohr_source.tsv.gz](gmsc_amp_genes_envohr_source.tsv.gz.md)
-        [high_[quality_candidates.txt](quality_candidates.txt.xz.md)](high_[quality_candidates.txt](quality_candidates.txt.xz.md).xz.md)
-        [pgenomes_samples.tsv](pgenomes_samples.tsv.xz.md)
-        [prevotella_species_list.tsv](prevotella_species_list.tsv.xz.md)
-        [quality_candidates.txt](quality_candidates.txt.xz.md)
-        [quality_families.txt](quality_families.txt.xz.md)
-        [SPHERE_v.2022-03.levels_assessment.tsv.gz](SPHERE_v.2022-03.levels_assessment.tsv.gz.md)
+ - [37185.fasta](37185.fasta.xz.md)
+ - [bac120_r202.tre](bac120_r202.tre.xz.md)
+ - [bac120_taxonomy_r202.tsv](bac120_taxonomy_r202.tsv.xz.md)
+ - [bps-per-sample-per-taxon.tsv.xz](bps-per-sample-per-taxon.tsv.xz.md)
+ - [bps-per-taxon.tsv.xz](bps-per-taxon.tsv.xz.md)
+ - [complete_amps_associated_taxonomy.tsv.gz](complete_amps_associated_taxonomy.tsv.gz.md)
+ - [gmsc_amp_genes_envohr_source.tsv.gz](gmsc_amp_genes_envohr_source.tsv.gz.md)
+ - [high_[quality_candidates.txt](quality_candidates.txt.xz.md)](high_[quality_candidates.txt](quality_candidates.txt.xz.md).xz.md)
+ - [pgenomes_samples.tsv](pgenomes_samples.tsv.xz.md)
+ - [prevotella_species_list.tsv](prevotella_species_list.tsv.xz.md)
+ - [quality_candidates.txt](quality_candidates.txt.xz.md)
+ - [quality_families.txt](quality_families.txt.xz.md)
+ - [SPHERE_v.2022-03.levels_assessment.tsv.gz](SPHERE_v.2022-03.levels_assessment.tsv.gz.md)
 
-	*Output*
+*Output*
 
-        [amps_all.count_core.tsv.gz](amps_all.count_core.tsv.gz.md)
-        [families_all.count_core.tsv.gz](families_all.count_core.tsv.gz.md)
+ - [amps_all.count_core.tsv.gz](amps_all.count_core.tsv.gz.md)
+ - [families_all.count_core.tsv.gz](families_all.count_core.tsv.gz.md)
         
 **10_select_candidates_for_synthesis**
 
-	*Input*
+*Input*
 
-        [AMPs_per_genomes.tsv](AMPs_per_genomes.tsv.xz.md)
-        [ampsphere_v2022-03.features.tsv.gz](ampsphere_v2022-03.features.tsv.gz.md)
-        [AMPSphere_v.2022-03.solsyn_rules.tsv.gz](AMPSphere_v.2022-03.solsyn_rules.tsv.gz.md)
-        [ensemble_predictions.tsv](ensemble_predictions.tsv.xz.md)
-        [gmsc_amp_genes_envohr_source.tsv.gz](gmsc_amp_genes_envohr_source.tsv.gz.md)
-        [quality_assessment.tsv](quality_assessment.tsv.xz.md)
-        [result_dramp.m8](result_dramp.m8.xz.md)
-        [result_SmProt.m8](result_SmProt.m8.xz.md)
-        [result_starPepDB.m8](result_starPepDB.m8.xz.md)
-        [SPHERE_v.2022-03.levels_assessment.tsv.gz](SPHERE_v.2022-03.levels_assessment.tsv.gz.md)
+ - [AMPs_per_genomes.tsv](AMPs_per_genomes.tsv.xz.md)
+ - [ampsphere_v2022-03.features.tsv.gz](ampsphere_v2022-03.features.tsv.gz.md)
+ - [AMPSphere_v.2022-03.solsyn_rules.tsv.gz](AMPSphere_v.2022-03.solsyn_rules.tsv.gz.md)
+ - [ensemble_predictions.tsv](ensemble_predictions.tsv.xz.md)
+ - [gmsc_amp_genes_envohr_source.tsv.gz](gmsc_amp_genes_envohr_source.tsv.gz.md)
+ - [quality_assessment.tsv](quality_assessment.tsv.xz.md)
+ - [result_dramp.m8](result_dramp.m8.xz.md)
+ - [result_SmProt.m8](result_SmProt.m8.xz.md)
+ - [result_starPepDB.m8](result_starPepDB.m8.xz.md)
+ - [SPHERE_v.2022-03.levels_assessment.tsv.gz](SPHERE_v.2022-03.levels_assessment.tsv.gz.md)
 
-	*Output*
+*Output*
 	
-        [AMPSphere_features.tsv](AMPSphere_features.tsv.md)
-        [AMPSphere_fmt_involved.tsv](AMPSphere_fmt_involved.tsv.md)
-        [AMPSphere_homologs.tsv](AMPSphere_homologs.tsv.md)
-        [AMPSphere_quality_control.tsv](AMPSphere_quality_control.tsv.md)
-        [AMPSphere_selected_candidates_coprediction.tsv](AMPSphere_selected_candidates_coprediction.tsv.md)
-        [AMPSphere_sequences.tsv](AMPSphere_sequences.tsv.md)
-        [AMPSphere_synthesis_solubility.tsv](AMPSphere_synthesis_solubility.tsv.md)
-        [AMPSphere_taxonomy_environment.tsv](AMPSphere_taxonomy_environment.tsv.md)
-        [selected_candidates.tsv](selected_candidates.tsv.md)
-        [selected_peptides.fasta](selected_peptides.fasta.md)
+ - [AMPSphere_features.tsv](AMPSphere_features.tsv.md)
+ - [AMPSphere_fmt_involved.tsv](AMPSphere_fmt_involved.tsv.md)
+ - [AMPSphere_homologs.tsv](AMPSphere_homologs.tsv.md)
+ - [AMPSphere_quality_control.tsv](AMPSphere_quality_control.tsv.md)
+ - [AMPSphere_selected_candidates_coprediction.tsv](AMPSphere_selected_candidates_coprediction.tsv.md)
+ - [AMPSphere_sequences.tsv](AMPSphere_sequences.tsv.md)
+ - [AMPSphere_synthesis_solubility.tsv](AMPSphere_synthesis_solubility.tsv.md)
+ - [AMPSphere_taxonomy_environment.tsv](AMPSphere_taxonomy_environment.tsv.md)
+ - [selected_candidates.tsv](selected_candidates.tsv.md)
+ - [selected_peptides.fasta](selected_peptides.fasta.md)
 
 **11_AMPs_from_Mpneumoniae**
 
-	*Input*
+*Input*
 
-        [fam_red.tsv](fam_red.tsv.xz.md)
-        [genomes_list](genomes_list.xz.md)
-        [genotyping_Mpneumoniae_Diaz2017_journal.pone.0174701.tsv](genotyping_Mpneumoniae_Diaz2017_journal.pone.0174701.tsv.xz.md)
-        [mgpa_ref.fa](mgpa_ref.fa.xz.md)
-        [progenomes_cluster1969.tsv](progenomes_cluster1969.tsv.xz.md)
+ - [fam_red.tsv](fam_red.tsv.xz.md)
+ - [genomes_list](genomes_list.xz.md)
+ - [genotyping_Mpneumoniae_Diaz2017_journal.pone.0174701.tsv](genotyping_Mpneumoniae_Diaz2017_journal.pone.0174701.tsv.xz.md)
+ - [mgpa_ref.fa](mgpa_ref.fa.xz.md)
+ - [progenomes_cluster1969.tsv](progenomes_cluster1969.tsv.xz.md)
 
-	*Output*
+*Output*
 	
-        [sample_genes](sample_genes.tar.xz.md)
-        [tree_alignment](tree_alignment.tar.xz.md)
-        [type1.txt](type1.txt.xz.md)
-        [type2.txt](type2.txt.xz.md)
-        [type3.txt](type3.txt.xz.md)
+ - [sample_genes](sample_genes.tar.xz.md)
+ - [tree_alignment](tree_alignment.tar.xz.md)
+ - [type1.txt](type1.txt.xz.md)
+ - [type2.txt](type2.txt.xz.md)
+ - [type3.txt](type3.txt.xz.md)
 
 **12_host_non_host_amps**
 
-	*Input*
+*Input*
 
-        [general_envo_names.tsv](general_envo_names.tsv.xz.md)
-        [gmsc_amp_genes_envohr_source.tsv.gz](gmsc_amp_genes_envohr_source.tsv.gz.md)
-        [metadata.tsv](metadata.tsv.xz.md)
-        [samples-min500k-assembly-prodigal-stats.tsv](samples-min500k-assembly-prodigal-stats.tsv.xz.md)
+ - [general_envo_names.tsv](general_envo_names.tsv.xz.md)
+ - [gmsc_amp_genes_envohr_source.tsv.gz](gmsc_amp_genes_envohr_source.tsv.gz.md)
+ - [metadata.tsv](metadata.tsv.xz.md)
+ - [samples-min500k-assembly-prodigal-stats.tsv](samples-min500k-assembly-prodigal-stats.tsv.xz.md)
 
-	*Output*
+*Output*
 	
-        [host_factor.svg](host_factor.svg.md)
-        [amp-density-per-habitat.svg](amp-density-per-habitat.svg.md)
-        [mannwhitneyu_test_mammalguts.tsv](mannwhitneyu_test_mammalguts.tsv.md)
+ - [host_factor.svg](host_factor.svg.md)
+ - [amp-density-per-habitat.svg](amp-density-per-habitat.svg.md)
+ - [mannwhitneyu_test_mammalguts.tsv](mannwhitneyu_test_mammalguts.tsv.md)
 
 **13_fmt_story**
 
-	*Input*
+*Input*
 
 
-	*Output*
+*Output*
 	
-        [merged_to_donor_samples.tsv.gz](merged_to_donor_samples.tsv.gz.md)
-        [merged_to_recipient_samples_post.tsv.gz](merged_to_recipient_samples_post.tsv.gz.md)
-        [merged_to_recipient_samples_pre.tsv.gz](merged_to_recipient_samples_pre.tsv.gz.md)
+ - [merged_to_donor_samples.tsv.gz](merged_to_donor_samples.tsv.gz.md)
+ - [merged_to_recipient_samples_post.tsv.gz](merged_to_recipient_samples_post.tsv.gz.md)
+ - [merged_to_recipient_samples_pre.tsv.gz](merged_to_recipient_samples_pre.tsv.gz.md)
 
 
