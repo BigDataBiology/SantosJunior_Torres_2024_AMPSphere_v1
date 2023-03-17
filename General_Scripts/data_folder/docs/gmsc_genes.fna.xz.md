@@ -1,1 +1,0 @@
-../../docs/gmsc_genes.fna.xz.md

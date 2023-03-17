@@ -28,10 +28,17 @@ by typing:
 ```
 $ python main.py
 ```
+
+or
+
+```
+$ ./main.sh
+```
+
 The files used in all analysis are saved in the `data_folder`,
 which the contents are listed in the link below:
 
-[data_folder](data_folder/README.md)
+[data_folder](../data_folder/README.md)
 
 ### Analysis
 
@@ -40,19 +47,21 @@ follow the links below to move to their functionalities
 and specificities.
 
  - [01_resource_generation](01_resource_generation/README.md)
- - [02_motifs_annotation](02_motifs_annotation/README.md)
- - [03_clustering_significance](03_clustering_significance/README.md)
- - [04_metadata_analysis](04_metadata_analysis/README.md)
- - [05_clonality_and_quality](05_clonality_and_quality/README.md)
- - [06_rnacode_amp_families](06_rnacode_amp_families/README.md)
- - [07_homologs_and_overlap](07_homologs_and_overlap/README.md)
- - [08_BGI_peptides](08_BGI_peptides/README.md)
- - [09_taxonomy_core_analysis](09_taxonomy_core_analysis/README.md)
- - [10_select_candidates_for_synthesis](10_select_candidates_for_synthesis/README.md)
- - [11_AMPs_from_Mpneumoniae](11_AMPs_from_Mpneumoniae/README.md)
- - [12_host_non_host_amps](12_host_non_host_amps/README.md)
- - [13_fmt_story](13_fmt_story/README.md)
-
+ - [02_clustering_significance](02_clustering_significance/README.md)
+ - [03_metadata_analysis](03_metadata_analysis/README.md)
+ - [04_rnacode_amp_families](04_rnacode_amp_families/README.md)
+ - [05_quality](05_quality/README.md)
+ - [06_homologs_and_overlap](06_homologs_and_overlap/README.md)
+ - [07_taxonomy_core_analysis](07_taxonomy_core_analysis/README.md)
+ - [08_amps_in_progenomes_ANI_core](08_amps_in_progenomes_ANI_core/README.md)
+ - [09_AMPs_from_Mpneumoniae](09_AMPs_from_Mpneumoniae/README.md)
+ - [10_rarity](10_rarity/README.md)
+ - [11_host_non_host_amps](11_host_non_host_amps/README.md)
+ - [12_genome_context](12_genome_context/README.md)
+ - [13_transmissibility](13_transmissibility/README.md)
+ - [14_BGI_peptides](14_BGI_peptides/README.md)
+ - [15_select_candidates_for_synthesis](15_select_candidates_for_synthesis/README.md)
+ 
 A complete relationship of input and output files
-per analysis is available [here](docs/Input_vs_Ouput_per_analysis.md)
+per analysis is available [here](../docs/Input_vs_Ouput_per_analysis.md)
 

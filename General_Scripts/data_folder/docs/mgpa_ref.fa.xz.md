@@ -1,1 +1,0 @@
-../../docs/mgpa_ref.fa.xz.md

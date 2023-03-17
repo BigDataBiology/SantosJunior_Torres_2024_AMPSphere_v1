@@ -1,1 +1,0 @@
-../../docs/antifam_100.tsv.gz.md

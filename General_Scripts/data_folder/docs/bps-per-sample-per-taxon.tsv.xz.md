@@ -1,1 +1,0 @@
-../../docs/bps-per-sample-per-taxon.tsv.xz.md

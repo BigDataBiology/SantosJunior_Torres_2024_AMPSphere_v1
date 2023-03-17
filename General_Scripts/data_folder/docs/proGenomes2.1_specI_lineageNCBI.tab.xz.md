@@ -1,1 +1,0 @@
-../../docs/proGenomes2.1_specI_lineageNCBI.tab.xz.md

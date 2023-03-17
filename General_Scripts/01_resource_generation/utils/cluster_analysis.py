@@ -136,12 +136,13 @@ def hmmlogo(select_fam, data_folder, analysis_folder):
     '''
     Computes HMM logo for each family
     '''
+    import lzma
     from .hmm import pict_hmmlogo
     
     for f in select_fam:
         # computing HMM logo
-        alph = f'{data_folder}/alph.json'
-        cmap = f'{data_folder}/cmap.json' 
+        alph = lzma.open(f'{data_folder}/alph.json')
+        cmap = lzma.open(f'{data_folder}/cmap.json')
         ifile = f'{analysis_folder}/families/hmm/{f}.hmm'
         ofile = f'{analysis_folder}/families/hmm_logo/{f}.svg'
         pict_hmmlogo(alph, cmap, ifile, ofile)

@@ -1,1 +1,0 @@
-../../docs/result_SmProt.m8.xz.md

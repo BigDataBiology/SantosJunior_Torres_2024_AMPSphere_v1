@@ -185,7 +185,7 @@ def assoc_metadata(data_folder, analysis_folder):
     
     # inputs
     metagenomes = f'{analysis_folder}/AMPsphere_metaG_annotation.tsv.gz'
-    metadata = f'{data_folder}/metadata.tsv'
+    metadata = f'{data_folder}/metadata.tsv.xz'
 
     # outputs
     host_out = f'{analysis_folder}/AMPSphere_v.2022-03.hosts.tsv.gz'

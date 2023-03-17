@@ -1,1 +1,0 @@
-../../docs/GMSC10.Macrel_05.AMPs.tsv.gz.md

@@ -18,7 +18,7 @@ def startup(data_folder, analysis_folder):
     specI = pd.read_table(f'{data_folder}/pgenomes_samples.tsv', 
                           sep='\t', header=None, names=['specI', 'genome'])
 
-    listed_genomes = f'{data_folder}/combinedVsearch3.50p.20n.norm.opt.0.042.filteredBlackList.map'
+    listed_genomes = f'{data_folder}/combinedVsearch3.50p.20n.norm.opt.0.042.filteredBlackList.map.xz'
     listed_genomes = pd.read_table(listed_genomes,
                                    sep='\t', header=None,
                                    names=['specI', 'genome'])
@@ -61,7 +61,7 @@ def link_taxa(data_folder, analysis_folder):
     data = pd.read_table(f'{analysis_folder}/AMPsphere_proGenomes_correspondence.tsv.gz',
                          sep='\t', header='infer', low_memory=False)
                          
-    ref = pd.read_table(f'{data_folder}/proGenomes2.1_specI_lineageNCBI.tab',
+    ref = pd.read_table(f'{data_folder}/proGenomes2.1_specI_lineageNCBI.tab.xz',
                         sep='\t', header=None, names=['genome', 'kingdom',
                                                       'phylum', 'class',
                                                       'order', 'family',

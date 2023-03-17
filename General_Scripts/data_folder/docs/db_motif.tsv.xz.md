@@ -1,1 +1,0 @@
-../../docs/db_motif.tsv.xz.md

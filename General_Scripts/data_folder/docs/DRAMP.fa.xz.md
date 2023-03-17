@@ -1,1 +1,0 @@
-../../docs/DRAMP.fa.xz.md

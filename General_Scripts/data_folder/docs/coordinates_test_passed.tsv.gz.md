@@ -1,1 +1,0 @@
-../../docs/coordinates_test_passed.tsv.gz.md

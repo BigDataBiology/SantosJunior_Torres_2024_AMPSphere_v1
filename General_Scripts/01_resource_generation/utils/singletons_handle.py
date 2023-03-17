@@ -55,7 +55,7 @@ def precomputed_res(data_folder, outdir):
     '''
     import pandas as pd
     
-    data = pd.read_table(f'{data_folder}/DRAMP_filter.raw.tsv',
+    data = pd.read_table(f'{data_folder}/DRAMP_filter.raw.tsv.xz',
                          sep='\t',
                          header=None,
                          names=['query', 'target', 'fident',
@@ -68,7 +68,7 @@ def precomputed_res(data_folder, outdir):
     parsed = parsed.sort_values(by=['bits', 'evalue', 'fident'],
                                 ascending=[False, True, False])
       
-    parsed.to_csv(f'{outdir}/DRAMP_filter.parsed.tsv', sep='\t', header=True, index=None)
+    parsed.to_csv(f'{outdir}/DRAMP_filter.parsed.tsv.xz', sep='\t', header=True, index=None)
     singletons_saved = set(parsed['query'])
 
     print(f'We could save {len(singletons_saved)}')
@@ -81,6 +81,7 @@ def recovering_singletons(singletons, outdir, dramp):
     Recover singletons with homologs in DRAMP,
     a database of AMPs
     '''
+    import lzma
     import tempfile
     import pandas as pd
     from .utils import call_mmseqs
@@ -105,14 +106,16 @@ def recovering_singletons(singletons, outdir, dramp):
                                     'qstart', 'qend', 'tstart', 'tend',
                                     'evalue', 'bits'])
         
+        data.to_csv(bout+'.xz', sep='\t', header=True, index=None)
+        
         parsed = data[(data.fident >= 0.75) & (data.evalue <= 1e-5)]
         parsed = parsed.sort_values(by=['bits', 'evalue', 'fident'],
                                     ascending=[False, True, False])
-        
+               
         singletons = list(singletons)
         parsed['query'] = [singletons[x] for x in parsed['query']]
 
-        parsed.to_csv(f'{outdir}/DRAMP_filter.parsed.tsv', sep='\t', header=True, index=None)
+        parsed.to_csv(f'{outdir}/DRAMP_filter.parsed.tsv.xz', sep='\t', header=True, index=None)
         singletons_saved = set(parsed['query'])
 
         print(f'We could save {len(singletons_saved)}')

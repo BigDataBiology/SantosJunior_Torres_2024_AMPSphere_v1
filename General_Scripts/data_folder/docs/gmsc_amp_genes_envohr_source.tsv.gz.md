@@ -1,1 +1,0 @@
-../../docs/gmsc_amp_genes_envohr_source.tsv.gz.md

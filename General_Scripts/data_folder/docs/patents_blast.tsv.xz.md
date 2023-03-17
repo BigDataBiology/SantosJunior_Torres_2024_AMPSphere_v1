@@ -1,1 +1,0 @@
-../../docs/patents_blast.tsv.xz.md

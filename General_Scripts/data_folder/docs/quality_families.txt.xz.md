@@ -1,1 +1,0 @@
-../../docs/quality_families.txt.xz.md

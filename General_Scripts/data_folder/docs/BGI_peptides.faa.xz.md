@@ -1,1 +1,0 @@
-../../docs/BGI_peptides.faa.xz.md

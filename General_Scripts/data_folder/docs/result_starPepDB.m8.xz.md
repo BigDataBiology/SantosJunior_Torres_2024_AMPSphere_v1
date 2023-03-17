@@ -1,1 +1,0 @@
-../../docs/result_starPepDB.m8.xz.md

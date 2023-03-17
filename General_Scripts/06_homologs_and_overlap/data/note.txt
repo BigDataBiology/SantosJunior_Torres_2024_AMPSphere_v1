@@ -1,0 +1,11 @@
+## WARNING
+
+To you use the full script, first you need
+to untar the file 'databases_homology.tar.xz'.
+To do that, you can simply:
+
+```
+unxz databases_homology.tar.xz
+untar databases_homology.tar
+```
+
