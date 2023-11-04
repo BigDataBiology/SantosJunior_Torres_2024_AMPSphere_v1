@@ -1,5 +1,3 @@
-from __future__ import with_statement
-
 import logging
 logger = logging.getLogger(__name__)
 
