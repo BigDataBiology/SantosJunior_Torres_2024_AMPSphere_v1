@@ -10,8 +10,8 @@ def main():
     import matplotlib.pyplot as plt
     plt.rcParams['svg.fonttype'] = 'none'
     
-    meta = pd.read_table('data/metadata.tsv')
-    syns = pd.read_table('data/general_envo_names.tsv')
+    meta = pd.read_table('data/metadata.tsv.xz')
+    syns = pd.read_table('data/general_envo_names.tsv.gz')
     
     higher_level = {'sediment' : 'other',
             'bird gut' : 'other animal',
@@ -108,7 +108,7 @@ def main():
     fig.tight_layout()
     fig.savefig('analysis/samples_per_habitat.svg')
         
-    samples = pd.read_table('data/samples-min500k-assembly-prodigal-stats.tsv',
+    samples = pd.read_table('data/samples-min500k-assembly-prodigal-stats.tsv.xz',
                             index_col=0)
                             
     gmsc = pd.read_table("data/gmsc_amp_genes_envohr_source.tsv.gz")
