@@ -172,7 +172,7 @@ def main():
     
     sel = sel.query('assembly_total_length > 1_000_000')
     sel = sel.query('ampsphere_amps_per_assembly_mbps < 4')
-    order = sel.groupby('general_envo_name').median()['ampsphere_amps_per_assembly_mbps'].sort_values().index
+    order = sel.groupby('general_envo_name')['ampsphere_amps_per_assembly_mbps'].median().sort_values().index
     
     sels = []
     for h in order:
