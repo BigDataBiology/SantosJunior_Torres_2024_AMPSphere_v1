@@ -1,164 +1,35 @@
 #!/usr/bin/env python
-# coding: utf-8
 
-# # AMPSphere v.2022-03
-# 
-# This is a notebook meant to form the set of notebooks used to analyze the data in AMPSphere and write the manuscript:
-# 
-# __AMPSphere: Global survey of prokaryotic antimicrobial peptides shaping microbiomes__
-# 
-# Figures generated in this script formed the panel shown in Figure 1C-E.
-
-# ## Overlap of AMPs from different environments is relevant
-# 
-# Here we will show how overlap of c_AMPs from different environments was computed.
-
-# In[1]:
-
-
-# load libraries
 import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
-
+from tqdm import tqdm
+from random import shuffle
+from scipy.stats import norm, shapiro
 from itertools import chain, permutations
 
+from environments import higher_level, color_map, animal_guts
 
-# In[2]:
-
-
-# creating sets of environments
-higher_level = {
-        'sediment' : 'other',
-        'bird gut' : 'other animal',
-        'cat gut' : 'mammal gut',
-        'insect associated' : 'other animal',
-        'human urogenital tract' : 'other human',
-        'dog gut' : 'mammal gut',
-        'fermented food' : 'anthropogenic',
-        'groundwater' : 'aquatic',
-        'coral associated' : 'other animal',
-        'rat gut' : 'mammal gut',
-        'human associated' : 'other human',
-        'cattle gut' : 'mammal gut',
-        'deer gut' : 'mammal gut',
-        'mouse gut' : 'mammal gut',
-        'river associated' : 'aquatic',
-        'primate gut' : 'mammal gut',
-        'human respiratory tract' : 'other human',
-        'cattle rumen' : 'other animal',
-        'human saliva' : 'other human',
-        'activated sludge' : 'anthropogenic',
-        'lake associated' : 'aquatic',
-        'wastewater' : 'anthropogenic',
-        'chicken gut' : 'other animal',
-        'air' : 'other',
-        'human mouth' : 'other human',
-        'plant associated' : 'soil/plant',
-        'water associated' : 'aquatic',
-        'pig gut' : 'mammal gut',
-        'human skin' : 'other human',
-        'marine' : 'aquatic',
-        'soil' : 'soil/plant',
-        'built environment' : 'anthropogenic',
-        'human gut' : 'human gut',
-        'anthropogenic': 'anthropogenic',
-        'bear gut' : 'mammal gut',
-        'rabbit gut': 'mammal gut',
-        'algae associated': 'other',
-        'crustacean gut': 'other animal',
-        'cattle associated': 'other animal',
-        'bird skin': 'other animal',
-        'bee gut': 'other animal',
-        'mussel associated': 'other animal',
-        'fisher gut': 'mammal gut',
-        'bat gut': 'mammal gut',
-        'sponge associated': 'other animal',
-        'human digestive tract': 'other human',
-        'beatle gut': 'other animal',
-        'dog associated': 'other animal',
-        'insect gut': 'other animal',
-        'extreme pH': 'other',
-        'food': 'other',
-        'guinea pig gut': 'mammal gut',
-        'goat rumen': 'other animal',
-        'mollusc associated': 'other animal',
-        'goat gut': 'mammal gut',
-        'horse gut': 'mammal gut',
-        'wasp gut': 'other animal',
-        'tunicate associated': 'other animal',
-        'annelidae associated': 'other animal',
-        'rodent gut': 'mammal gut',
-        'ship worm associated': 'other animal',
-        'coyote gut': 'mammal gut',
-        'crustacean associated': 'other animal',
-        'termite gut': 'other animal',
-        'planarian associated': 'other animal',
-        'thermal vent associated': 'other',
-        'fish gut': 'other animal',
-        'ice associated': 'other',
-        'mock community': 'other',
-        'mine': 'other',
-        'pond associated': 'aquatic',
-        'hot spring associated': 'other',
-        }
-
-
-# In[3]:
-
-
-color_map = {'human gut' : (0.8509803921568627, 0.37254901960784315, 0.00784313725490196),
-        'soil/plant' : (0.10588235294117647, 0.6196078431372549, 0.4666666666666667),
-        'aquatic' : (0.4588235294117647, 0.4392156862745098, 0.7019607843137254),
-        'anthropogenic' : (0.9058823529411765, 0.1607843137254902, 0.5411764705882353),
-        'other human' : (0.4, 0.6509803921568628, 0.11764705882352941),
-        'mammal gut' : (0.9019607843137255, 0.6705882352941176, 0.00784313725490196),
-        'other animal' : (0.6509803921568628, 0.4627450980392157, 0.11372549019607843),
-        'other' : (0.4, 0.4, 0.4)}
-
-
-# In[4]:
-
-
-# load data
 data = pd.read_table('data/gmsc_amp_genes_envohr_source.tsv.gz',
                      sep='\t',
                      header='infer')
 
-
-# In[5]:
-
-
 # filter duplicates
-data = data[data.is_metagenomic == True]
+data = data.query('is_metagenomic')
 data = data[['amp', 'general_envo_name']].drop_duplicates()
-data = data.groupby('general_envo_name')['amp'].apply(lambda x: set(x))
+data = data.groupby('general_envo_name')['amp'].apply(set)
 
-
-# In[6]:
-
-
-# add environments with at least 100 peptides
-data = data.apply(lambda x: x if len(x) >= 100 else 'NA')
-data = data[data != 'NA']
-
-
-# In[7]:
+# select environments with at least 100 peptides
+data = data[data.map(len) >= 100]
 
 
 # add the high_level environment
 data = data.reset_index()
 data['high'] = [higher_level.get(x, 'other') for x in data.general_envo_name]
 data.set_index('general_envo_name', inplace=True)
-data
-
 
 # ### For low level habitats
-
-# In[8]:
-
-
 # calculate overlap
 df = []
 combs = permutations(data.index, 2)
@@ -177,11 +48,6 @@ for i in data.index:
 # formatting table
 df = pd.DataFrame(df, columns=['env1', 'env2', 'overlap'])
 df = df.pivot(index='env1', columns='env2', values='overlap')
-df
-
-
-# In[9]:
-
 
 # normalize
 df = df * 100 / df.max(axis=0)
@@ -196,16 +62,9 @@ ncol = df.index
 df = df[ncol]
 
 
-# In[10]:
-
-
 # create a color map for the general envo having
 # as keys the high level environment
 colors = [color_map[higher_level[i]] for i in df.index]
-
-
-# In[11]:
-
 
 g = sns.clustermap(data=df,
                    col_colors=colors,
@@ -227,24 +86,16 @@ g.cax.set_position([.15, .2, .03, .45])
 
 # ### For high level environments
 
-# In[12]:
-
-
 df = data.groupby('high')['amp'].apply(lambda x: set(chain.from_iterable(x)))
 
 
-# In[13]:
-
-
-combs = permutations(df.index, 2)
-
 newdf = []
-for i, j in combs:
+for i, j in permutations(df.index, 2):
     set_i = df.loc[i]
     set_j = df.loc[j]
     n = len(set_i.intersection(set_j))
     newdf.append((i, j, n))
-    
+
 for i in df.index:
     newdf.append((i,
                   i,
@@ -253,10 +104,6 @@ for i in df.index:
 
 newdf = pd.DataFrame(newdf, columns=['env1', 'env2', 'overlap'])
 newdf = newdf.pivot(index='env1', columns='env2', values='overlap')
-newdf
-
-
-# In[14]:
 
 
 # normalize
@@ -267,32 +114,21 @@ mask = np.zeros_like(newdf)
 mask[np.tril_indices_from(mask)] = True
 
 
-# In[15]:
-
-
+fig, ax = plt.subplots()
 sns.heatmap(newdf.astype('int'),
             annot=False,
             cmap="YlOrBr",
-            mask=mask, square=True)
-
-plt.tight_layout()
+            mask=mask, square=True,
+            ax=ax)
+fig.tight_layout()
 
 
 # ### For animal guts
-
-# In[16]:
-
-
 # getting AMP overlap from guts in each host
-animal_guts = ['human gut', 'pig gut',
-               'chicken gut', 'mouse gut',
-               'dog gut', 'cat gut',
-               'cattle gut']
 
-combs = permutations(animal_guts, 2)
 
 newdf = []
-for i, j in combs:
+for i, j in permutations(animal_guts, 2):
     set_i = data.loc[i, 'amp']
     set_j = data.loc[j, 'amp']
     n = len(set_i.intersection(set_j))
@@ -306,10 +142,6 @@ for i in animal_guts:
 
 newdf = pd.DataFrame(newdf, columns=['env1', 'env2', 'overlap'])
 newdf = newdf.pivot(index='env1', columns='env2', values='overlap')
-newdf
-
-
-# In[17]:
 
 
 # normalize
@@ -319,22 +151,17 @@ newdf = newdf * 100 / newdf.max(axis=0)
 mask = np.zeros_like(newdf)
 mask[np.tril_indices_from(mask)] = True
 
-
-# In[18]:
-
-
+fig, ax = plt.subplots()
 sns.heatmap(newdf.astype('int'),
             annot=False,
             cmap="YlOrBr",
-            mask=mask, square=True)
+            mask=mask, square=True,
+            ax=ax)
 
-plt.tight_layout()
+fig.tight_layout()
 
 
 # ### For human body sites
-
-# In[19]:
-
 
 human_body = ['human skin', 'human respiratory tract',
               'human mouth',
@@ -348,14 +175,9 @@ data = data.drop(['human mouth', 'human saliva'], axis=0)
 data.loc['human mouth'] = [x, 'other human']
 
 
-# In[20]:
-
-
 # calculating overlaps
-combs = permutations(human_body, 2)
-
 newdf = []
-for i, j in combs:
+for i, j in permutations(human_body, 2):
     set_i = data.loc[i, 'amp']
     set_j = data.loc[j, 'amp']
     n = len(set_i.intersection(set_j))
@@ -371,10 +193,6 @@ for i in human_body:
 # formatting result
 newdf = pd.DataFrame(newdf, columns=['env1', 'env2', 'overlap'])
 newdf = newdf.pivot(index='env1', columns='env2', values='overlap')
-newdf
-
-
-# In[21]:
 
 
 # normalize
@@ -384,23 +202,26 @@ newdf = newdf * 100 / newdf.max(axis=0)
 mask = np.zeros_like(newdf)
 mask[np.tril_indices_from(mask)] = True
 
-
-# In[22]:
-
-
+fig,ax = plt.subplots()
 sns.heatmap(data=newdf.astype('int'),
             annot=False,
             cmap="YlOrBr",
-            mask=mask, square=True)
-
-plt.tight_layout()
-
+            mask=mask, square=True,
+            ax=ax)
+fig.tight_layout()
 
 # ## Testing significance of c_AMPs overlap in habitats
 # 
 # We tested overlap of c_AMP contents of habitats presenting AMPs in at least 100 samples. Then, a permutation test was performed by shuffling the labels of samples and recalculating the overlap between each pair of habitats 32 times. The average and standard deviation overlap c_AMPs was calculated and the Z-score of the actual measure was computed. The p-value is then calculated using the survival function of *scipy.stats*.
 
-# In[23]:
+import pandas as pd
+import numpy as np
+import seaborn as sns
+import matplotlib.pyplot as plt
+from tqdm import tqdm
+from random import shuffle
+from scipy.stats import norm, shapiro
+from itertools import chain, permutations
 
 
 # loading data
@@ -413,9 +234,6 @@ data = data[data.is_metagenomic == True]
 data = data[['amp', 'sample', 'general_envo_name']].drop_duplicates()
 
 
-# In[24]:
-
-
 # eliminating environments with less than 100 samples
 df = data[['sample', 'general_envo_name']].drop_duplicates()
 df = df.general_envo_name.value_counts()
@@ -426,15 +244,6 @@ df['high'] = df.general_envo_name.map(lambda x: higher_level.get(x))
 df
 
 
-# In[25]:
-
-
-import numpy as np
-
-from tqdm import tqdm
-from random import shuffle
-from itertools import chain, combinations
-from scipy.stats import norm, shapiro
 
 def permtest(df, n: int):
     '''
