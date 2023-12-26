@@ -1,22 +1,5 @@
 #!/usr/bin/env python
-# coding: utf-8
 
-# # AMPSphere v.2022-03
-# 
-# This is a notebook meant to form the set of notebooks used to analyze the data in AMPSphere and write the manuscript:
-# 
-# __AMPSphere: Global survey of prokaryotic antimicrobial peptides shaping microbiomes__
-# 
-# ### GMGC v.1 homolog c_AMPs 
-# 
-# Here, we show how c_AMPs from AMPSphere are aligned to homolog large proteins from GMGC, their features and
-# distribution.
-# 
-
-# In[1]:
-
-
-# import libraries
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -27,81 +10,57 @@ from scipy.stats import kruskal, mannwhitneyu
 
 plt.rcParams['svg.fonttype'] = 'none'
 
+M8_NAMES = ['query', 'target', 'evalue',
+           'gapopen', 'pident', 'nident',
+           'qstart', 'qend', 'qlen',
+           'tstart', 'tend', 'tlen',
+           'alnlen', 'raw', 'bits',
+           'cigar', 'qseq', 'tseq',
+           'qheader', 'theader', 'qaln',
+           'taln', 'qframe', 'tframe',
+           'mismatch', 'qcov', 'tcov']
 
-# In[2]:
-
-
-# loading data
-gmgc = pd.DataFrame()
-for record in pd.read_table('../data_folder/result_gmgc.m8.xz',
-                            header=None,
-                            chunksize=1_000_000):
-    gmgc = pd.concat([gmgc, record])
-
-gmgc.columns = ['query', 'target', 'evalue',
-                'gapopen', 'pident', 'nident', 
-                'qstart', 'qend', 'qlen',
-                'tstart', 'tend', 'tlen',
-                'alnlen', 'raw', 'bits',
-                'cigar', 'qseq', 'tseq',
-                'qheader', 'theader', 'qaln',
-                'taln', 'qframe', 'tframe',
-                'mismatch', 'qcov', 'tcov']
-
-
-# In[3]:
-
+gmgc = pd.read_table('../data_folder/result_gmgc.m8.xz',
+                     names=M8_NAMES,
+                     header=None,
+                     usecols=['query', 'evalue', 'bits', 'pident', 'qstart', 'qend', 'qlen', 'tstart', 'tend', 'tlen'])
 
 # creating some measures
 # make zero-based
 gmgc['tstart'] -= 1
 # fix for macrel initial methionine deletion
 gmgc.loc[gmgc.tstart == 1, 'tstart'] = 0
-gmgc['pct_start'] = gmgc['tstart'] * 100 / gmgc['tlen']
-gmgc['pct_end'] = gmgc['tend'] * 100 / gmgc['tlen']
-gmgc['pct_amp'] = (1 + gmgc.qend - gmgc.qstart)*100 / gmgc.qlen
-
-
-# In[5]:
+gmgc['pct_start'] = gmgc.eval('tstart * 100 / tlen')
+gmgc['pct_end']   = gmgc.eval('tend * 100 / tlen')
+gmgc['pct_amp']   = gmgc.eval('(1 + qend - qstart)*100 / qlen')
 
 
 # histogram of pct_start
-gmgc = gmgc.sort_values(
+gmgc.sort_values(
     by=['evalue', 'bits', 'pident'],
-    ascending=[True, False, False]
+    ascending=[True, False, False],
+    inplace=True,
 )
-                                                                                                                                                                                                                                            
+
 df = gmgc.groupby('query').head(1)
 
 # df.to_csv('filtered_gmgc_homologs.tsv.gz', sep='\t', header=True, index=None)
 
-
-# In[6]:
-
-
-sns.displot(data=df,
+fig,ax = plt.subplots()
+sns.histplot(data=df,
             x='pct_start',
-            bins=100, 
-            color='black')
+            bins=100,
+            color='black',
+            ax=ax)
 
-plt.xlabel('Match start (% of target length)')
-plt.ylabel('Counts')
-plt.show()
+ax.set_xlabel('Match start (% of target length)')
+ax.set_ylabel('Counts')
 
-
-# In[7]:
-
-
-f = df[(df.pct_start <= 25)|(df.pct_start >= 75)]
-f = len(f) * 100 / len(df)
-
-print(f'{f:.2}% of hits begin in the initial or final 25% of target protein')
+f = df.eval('pct_start <= 25 | pct_start >= 75').mean()
+print(f'{f:.1%} of hits begin in the initial or final 25% of target protein')
 
 
 # ## Enrichment of ortholog groups among the homologs
-
-# In[8]:
-
 
 data = pd.read_table('../data_folder/adjust_significant_function.csv.xz',
                      sep='\t',
@@ -119,7 +78,7 @@ data.columns = ['EggNOG ortholog group',
                 'Enrichment (fold)',
                 'Adjusted P-value']
 
-e5 = pd.read_table('../data_folder/e5_annotations.tsv.gz', 
+e5 = pd.read_table('../data_folder/e5_annotations.tsv.gz',
                   sep='\t',
                   header=None)
 
@@ -137,10 +96,6 @@ e5 = e5.drop_duplicates()
 k = e5['EggNOG ortholog group'].value_counts()
 k = k[k==1]
 e5 = e5[e5['EggNOG ortholog group'].isin(k.index)]
-
-
-# In[9]:
-
 
 print('Working with OGs')
 
@@ -173,15 +128,10 @@ x.rename({'class': 'Functional class'}, axis=1, inplace=True)
 x = x[x['Enrichment (fold)'] >= 1.5]
 x = x[x['Adjusted P-value'] < 0.05]
 
-x.to_csv('suppTableS3.tsv',
+x.to_csv('outputs/suppTableS3.tsv',
          sep='\t',
          header=True,
          index=None)
-
-x
-
-
-# In[10]:
 
 
 a = x.groupby('Functional class').agg('size')
@@ -199,18 +149,12 @@ order = ['Unknown function',
          'Energy production\nand conversion',
          'Transcription']
 d = pd.concat([d[d['Functional class'] == w] for w in order])
-d
-
-
-# ## Plot 2CA
-
-# In[11]:
 
 
 colors = {'c > 10': (140/255, 45/255, 4/255),
           '5 < c <= 10': (254/255, 153/255, 41/255),
           'c <= 5': (255/255, 247/255, 188/255)}
-          
+
 for w in colors:
     sns.barplot(data=d[d['variable'] == w],
                 y='Functional class',
@@ -218,21 +162,12 @@ for w in colors:
                 color=colors[w],
                 label=w)
 
-plt.legend()
-plt.tight_layout()
-#plt.savefig('2C.svg')
-plt.show()
-plt.close()
+ax.legend()
+fig.tight_layout()
+fig.savefig('outputs/GMGC_og_functions.svg')
 
 
-# ## Plot 2CB
-
-# In[12]:
-
-
-f1 = (x['Counts in the homologs of c_AMPs'] >= 20)
-f2 = (x['Counts in the homologs of c_AMPs'] >= 20)
-x = x[f1 & f2]
+x = x.query('`Counts in the homologs of c_AMPs` >= 20')
 
 order = x.groupby('Functional class')
 order = order['Enrichment (fold)'].quantile([0.5])
@@ -246,38 +181,35 @@ cmap = {'Unknown function': (43/255, 142/255, 112/255, 255/255),
         'Energy production\nand conversion': (207/255, 65/255, 138/255, 255/255),
         'Transcription': (101/255, 149/255, 47/255, 255/255)}
 
+fig, ax = plt.subplots()
 sns.boxplot(data=x,
             y='Functional class',
             x='Enrichment (fold)',
             color='white',
             width=0.4,
             showfliers=False,
-            order=order)
+            order=order,
+            ax=ax)
 
 sns.stripplot(data=x,
               y='Functional class',
               x='Enrichment (fold)',
               s=3,
               palette=cmap,
-              order=order)
+              order=order,
+              ax=ax)
 
-plt.xscale('log')
-plt.yticks(rotation=35)
-plt.legend('')
-plt.tight_layout()
-#plt.savefig('fig2D.svg')
-plt.show()
-
+ax.set_xscale('log')
+ax.legend('')
+fig.tight_layout()
+fig.savefig('outputs/gmgc_functional_enrichment.svg')
 
 # ## Statistical testing of enrichment and abundance
-
-# In[13]:
-
 
 print('Test of c_AMP homolog counts for each OG')
 c = x.groupby('Functional class').apply(lambda w: w['Counts in the homologs of c_AMPs'].tolist())
 _, p = kruskal(*c)
-print(f'Kruskal result: p={p:.2E}')
+print(f'Kruskal result: p={p:.2e}')
 
 print('Paired:')
 print('category1\tcategory2\tP-value')
@@ -288,7 +220,7 @@ for i, j in combinations(c.index, 2):
 print('Test of c_AMP enrichment')
 c = x.groupby('Functional class').apply(lambda w: w['Enrichment (fold)'].tolist())
 _, p = kruskal(*c)
-print(f'Kruskal result: p={p:.2E}')
+print(f'Kruskal result: p={p:.2e}')
 
 print('Paired:')
 print('category1\tcategory2\tP-value')
