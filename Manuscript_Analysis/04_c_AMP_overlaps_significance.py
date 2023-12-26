@@ -209,10 +209,6 @@ def collectors(df, envo: str, col: str, perms=None, step=None):
         f.append(presult)
     return (envo, f)
 
-
-# In[32]:
-
-
 ccurves = []
 for i in high_habitats:
     h, c = collectors(df=itdf,
@@ -221,10 +217,6 @@ for i in high_habitats:
                       perms=32)
 
     ccurves.append((h, c))
-
-
-# In[33]:
-
 
 avg_table = pd.DataFrame([x[1] for x in ccurves],
                          index=[x[0] for x in ccurves]).T
@@ -235,13 +227,9 @@ avg_table = avg_table.set_index('samples')
 fig, ax = plt.subplots()
 sns.lineplot(data=avg_table/1000, palette='Dark2', ax=ax)
 
-ax.ylabel('c_AMPs (Thousands)')
-ax.xlabel('Random samples')
+ax.set_ylabel('c_AMPs (Thousands)')
+ax.set_xlabel('Random samples')
 fig.savefig('outputs/collector_curves_highenvo.svg')
-
-
-# In[34]:
-
 
 # export avg_table
 avg_table.to_csv('outputs/collectors_curve_highenvo.tsv.gz',
@@ -267,9 +255,6 @@ for i in k:
     ccurves.append((h, c))
 
 
-# In[36]:
-
-
 avg_table = pd.DataFrame([x[1] for x in ccurves],
                          index=[x[0] for x in ccurves]).T
 
@@ -281,8 +266,8 @@ sns.lineplot(data=avg_table/1000,
              palette='Dark2',
              ax=ax)
 
-ax.ylabel('c_AMPs (Thousands)')
-ax.xlabel('Random samples')
+ax.set_ylabel('c_AMPs (Thousands)')
+ax.set_xlabel('Random samples')
 fig.savefig('outputs/collector_curves_generalenvo.svg')
 
 
