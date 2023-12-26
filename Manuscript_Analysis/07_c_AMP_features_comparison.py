@@ -7,10 +7,18 @@ import numpy as np
 import seaborn as sns
 from matplotlib import pyplot as plt
 from matplotlib import cm
+from modlamp.descriptors import GlobalDescriptor
+from modlamp.descriptors import PeptideDescriptor
+from os import makedirs
+makedirs('figures', exist_ok=True)
+plt.rcParams['svg.fonttype'] = 'none'
+plt.rcParams['font.family'] = 'sans-serif'
+plt.rcParams['xtick.labelsize'] = 'smaller'
 
 ampsphere = pd.read_csv('../data_folder/ampsphere_v2022-03.features.tsv.gz', sep="\t")
 dramp = pd.read_csv('../data_folder/dramp_v3.features.tsv.gz', sep="\t")
 macrel = pd.read_csv('../data_folder/macrel_trainpos.features.tsv.gz', sep="\t")
+neg_macrel = pd.read_csv('../data_folder/macrel_trainneg.features.tsv.gz', sep="\t")
 
 # Macrel's internal script to compute features did not use the protein length
 # as a feature, and therefore, to compare it through these different datasets,
@@ -18,55 +26,79 @@ macrel = pd.read_csv('../data_folder/macrel_trainpos.features.tsv.gz', sep="\t")
 # We also remove columns that Macrel uses in its internal pipeline and we won't
 # be using here.
 
-for feats in [ampsphere, dramp, macrel]:
+
+for feats in [ampsphere, dramp, macrel, neg_macrel]:
     feats['length'] = feats.sequence.str.len()
+    gc = GlobalDescriptor(feats.sequence.tolist())
+    gc.hydrophobic_ratio()
+    feats['hydro_ratio'] = gc.descriptor.ravel()
+
+    pd = PeptideDescriptor(feats.sequence.tolist(), 'flexibility')
+    pd.calculate_global()
+    feats['flexibility'] = pd.descriptor.ravel()
+
+    pd = PeptideDescriptor(feats.sequence.tolist(), 'gravy')
+    pd.calculate_global()
+    feats['gravy'] = pd.descriptor.ravel()
+
     feats.drop(['group',
             'sequence'],
            axis=1,
            inplace=True)
 
 def getlims(feat):
-    feats = [
+    xmin = ampsphere[feat].max()
+    xmax = ampsphere[feat].min()
+    for feats in [
             ampsphere[feat].values,
             dramp[feat].values,
-            macrel[feat].values
-            ]
-    xs = np.concatenate(feats)
-    xs.sort()
-    cut = 10
-    return xs[cut], xs[-cut]
+            macrel[feat].values,
+            neg_macrel[feat].values,
+            ]:
+        xs = feats.copy()
+        xs.sort()
+        cut = len(xs) // 100
+        if xs[cut] < xmin:
+            xmin = xs[cut]
+        if xs[-cut] > xmax:
+            xmax = xs[-cut]
+    return xmin, xmax
 
-graphkey = {
-            'a': ['length',     'Length (residues)'],
-            'b': ['smallAA',    'Small residues'],
-            'c': ['basicAA',    'Basic residues'],
-            'd': ['pI',         'Isoelectric point'],
-            'e': ['charge',     'Charge at pH 7.0'],
-            'f': ['aindex',     'Aliphatic index'],
-            'g': ['instaindex', 'Instability index'],
-            'h': ['boman',      'Boman index'],
-            'i': ['hmoment',    'Hydrophobic moment']
-            }
+panels = [
+          ('length',     'Length (residues)'),
+          ('smallAA',    'Small residues'),
+          ('basicAA',    'Basic residues'),
+          ('pI',         'Isoelectric point'),
+          ('charge',     'Charge at pH 7.0'),
+          ('aindex',     'Aliphatic index'),
+          ('instaindex', 'Instability index'),
+          ('boman',      'Boman index'),
+          ('hmoment',    'Hydrophobic\nmoment'),
+          ('hydro_ratio','Hydrophobic ratio'),
+          ('flexibility','Flexibility'),
+          ('gravy',      'GRAVY'),
+          ]
 
+PANEL_WIDTH = 0.2
+SUBPANEL_HEIGHT = 0.07
 fig = plt.figure()
-for ix,k in enumerate(graphkey):
-    pos_i = ix % 3
-    pos_j = ix // 3
-    feat, label = graphkey[k]
-    ax0 = fig.add_axes([.025 + pos_i * .3, 0.075 + pos_j * .3, .25, .12])
-    ax1 = fig.add_axes([.025 + pos_i * .3, 0.1125 + pos_j * .3, .25, .12], sharex=ax0)
-    ax2 = fig.add_axes([.025 + pos_i * .3, 0.150 + pos_j * .3, .25, .12], sharex=ax0)
-    for data,data_label,ax,c in zip([ampsphere, dramp, macrel],
-                                ['AMPSphere', 'DRAMP', 'Macrel'],
-                                [ax0,ax1,ax2],
-                                cm.Dark2.colors,
+for ix,(feat,label) in enumerate(panels):
+    pos_i = ix % 4
+    pos_j = ix // 4
+    ax0 = fig.add_axes([.025 + pos_i * .25, 0.075 + pos_j * .3, PANEL_WIDTH, SUBPANEL_HEIGHT])
+    ax1 = fig.add_axes([.025 + pos_i * .25, 0.100 + pos_j * .3, PANEL_WIDTH, SUBPANEL_HEIGHT], sharex=ax0)
+    ax2 = fig.add_axes([.025 + pos_i * .25, 0.125 + pos_j * .3, PANEL_WIDTH, SUBPANEL_HEIGHT], sharex=ax0)
+    ax3 = fig.add_axes([.025 + pos_i * .25, 0.150 + pos_j * .3, PANEL_WIDTH, SUBPANEL_HEIGHT], sharex=ax0)
+    for data,data_label,ax,c in zip([neg_macrel, macrel, dramp, ampsphere],
+                                ['Macrel (neg)', 'Macrel (pos)', 'DRAMP', 'AMPSphere'],
+                                [ax0, ax1, ax2, ax3],
+                                cm.Dark2.colors[:4][::-1], # Use the first 4 colours, but have the negative group by red(ish)
                                 ):
         ax.patch.set_visible(False)
         sns.kdeplot(ax=ax,
                     fill=True,
                     bw_method='silverman',
                     cut=0,
-                    bw_adjust=1.2,
                     data=data,
                     x=feat,
                     label=data_label,
@@ -79,13 +111,15 @@ for ix,k in enumerate(graphkey):
         ax.spines['left'].set_visible(False)
         ax.spines['top'].set_visible(False)
         ax.spines['right'].set_visible(False)
-        if k == 'a':
+        if ix == 0:
            ax.legend()
-    for ax in [ax1, ax2]:
+    for ax in [ax1, ax2, ax3]:
         ax.spines['bottom'].set_visible(False)
         ax.get_xaxis().set_visible(False)
 
-    ax2.set_title(label,
+    ax3.set_title(label,
                  fontfamily='Sans Serif',
-                 fontsize='large',
+                 fontsize='small',
                  loc='left')
+fig.savefig('figures/07_c_AMP_features_comparison.svg', bbox_inches='tight')
+fig.savefig('figures/07_c_AMP_features_comparison.png', bbox_inches='tight', dpi=300)
