@@ -138,7 +138,7 @@ def aln(seq1,
     return (seq_id, g_seq_id, cov, score, lent)
 
 
-def f_evalue(seq1, score):
+def f_evalue(seq1, score, use_gapped=True):
     '''
     From a sequence length and a score of the
     alignment, calculates the corresponding evalue
@@ -147,7 +147,12 @@ def f_evalue(seq1, score):
     import math
     import numpy as np
     # From BLAST adapted to peptides search (Lambda)
-    K, l = (0.041, 0.267)
+    if use_gapped:
+        K = 0.041
+        l = 0.267
+    else:
+        K = 0.132539
+        l = 0.313667
     # Number of residues in the AMPSphere dataset
     m = 32509722
     N = m*len(seq1)
