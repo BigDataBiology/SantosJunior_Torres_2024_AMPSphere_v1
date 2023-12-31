@@ -50,19 +50,15 @@ def rep_level(data):
                 'L']
         d = data[filt]
         d = d[d[f'SPHERE_fam level {l}'].isin(excl)]
-        for record in d.groupby(f'SPHERE_fam level {l}'):
-            record = record[1]
+        for _, record in d.groupby(f'SPHERE_fam level {l}'):
             record = record[record.L == record.L.max()]
-            if len(record) == 1:
-                o.append(record['AMP accession'].tolist()[0])
-            else:
+            if len(record) > 1:
                 record = record.sort_values(by='sequence')
-                record = record.head(1)
-                o.append(record['AMP accession'].tolist()[0])
+            o.append(record['AMP accession'].iloc[0])
     return (rI, rII, rIII)
 
 
-def sample_seqs(data, representatives: list, level: str, n=1000):    
+def sample_seqs(data, representatives: list, level: str, n=1000):
     '''
     Draw samples for the level of clustering studied
     Inputs: data - dataframe obtained from clusters_load()
@@ -77,12 +73,7 @@ def sample_seqs(data, representatives: list, level: str, n=1000):
     tobesampled = tobesampled[tobesampled[f'SPHERE_fam level {level}'].isin(kexcl)]
     tobesampled = tobesampled[['AMP accession', f'SPHERE_fam level {level}']]
     # perform sampling
-    sample_1 = tobesampled.sample(n)['AMP accession'].tolist()
-    sample_2 = tobesampled[(~tobesampled['AMP accession'].isin(sample_1))]
-    sample_2 = sample_2.sample(n)['AMP accession'].tolist()
-    sample_3 = tobesampled[(~tobesampled['AMP accession'].isin(sample_1 + sample_2))]
-    sample_3 = sample_3.sample(n)['AMP accession'].tolist()
-    return [sample_1, sample_2, sample_3]
+    return tobesampled.sample(n)['AMP accession'].tolist()
 
 
 def fix_rnsamples(data, sample, representatives, level):
@@ -111,22 +102,6 @@ def fix_rnsamples(data, sample, representatives, level):
     return sample
 
 
-def gap_function(x, y):
-    '''
-    Provides a weighting function for the 
-    gaps in an alignment. It uses the 
-    logarithm progression
-    # x is gap position in seq,
-    # y is gap length    
-    '''
-    import math
-    if y == 0:  # No gap
-        return 0
-    elif y == 1:  # Gap open penalty
-        return -2
-    return - (2 + y/4 + math.log(y)/2.0)
-
-
 def _calculate_identity(sequenceA, sequenceB):
     """
     Returns the percentage of identical characters between two sequences.
@@ -142,7 +117,10 @@ def _calculate_identity(sequenceA, sequenceB):
     return (seq_id, gap_id, cov)
 
 
-def aln(seq1, seq2):
+def aln(seq1,
+        seq2,
+        gap_open=-10,
+        gap_extend=-0.5):
     '''
     Align two sequences using BLOSUM62
     Returns score and alignment length
@@ -152,8 +130,8 @@ def aln(seq1, seq2):
     alignments = align.globalds(seq1,
                                 seq2,
                                 mt.load('BLOSUM62'),
-                                -10,
-                                -0.5)
+                                gap_open,
+                                gap_extend)
     aligned_A, aligned_B, score, begin, end = alignments[0]
     lent = end - begin  # alignment length
     seq_id, g_seq_id, cov = _calculate_identity(aligned_A, aligned_B)
@@ -162,33 +140,27 @@ def aln(seq1, seq2):
 
 def f_evalue(seq1, score):
     '''
-    From a sequence length and a score of the 
+    From a sequence length and a score of the
     alignment, calculates the corresponding evalue
     for hit
     '''
     import math
     import numpy as np
     # From BLAST adapted to peptides search (Lambda)
-    K, l = (0.132539, 0.313667)
+    K, l = (0.041, 0.267)
     # Number of residues in the AMPSphere dataset
     m = 32509722
-    # start calculus
     N = m*len(seq1)
     Sbit = l*score
-    Sbit = Sbit - np.log(K)
-    Sbit = Sbit / np.log(2)
+    Sbit -= np.log(K)
+    Sbit /= np.log(2)
     # The score is an HSP, then the evalue formula is: Kmne^(-l*S)
-    # The bit score (Sbit) use is more accuracte because it
+    # The bit score (Sbit) use is more accurate because it
     # was optimized. The e-value is calculated as: N/(e^Sbit)
-    evalue = -1 * Sbit
-    evalue = (math.e) ** evalue
-    evalue = N * evalue
-    if evalue <= 1e-5: ev = '*'
-    else: ev = 'n.s.'
-    return (evalue, ev)
+    return N * np.exp(-Sbit)
 
 
-def process_aln(sample_df, replicate):
+def align_to_representative(sample_df):
     '''
     Process the samples by replicate returning
     a dataframe of the alignment of each sampled sequence
@@ -198,18 +170,16 @@ def process_aln(sample_df, replicate):
     out = []
     for record in sample_df.itertuples():
         sid, gid, cov, score, lent = aln(record.sequence_x,
-                                         record.sequence_y)
-        evalue, ev = f_evalue(record.sequence_x,
-                              score)
-        out.append([record._1, 
-                    record._4, 
+                                         record.sequence_y, -10, -0.5)
+        evalue = f_evalue(record.sequence_x, score)
+        out.append([record._1,
+                    record._4,
                     sid,
-                    gid, 
+                    gid,
                     cov,
-                    score, 
-                    lent, 
+                    score,
+                    lent,
                     evalue,
-                    ev,
                     record.family])
     out = pd.DataFrame(out, columns=['query',
                                      'target',
@@ -219,11 +189,10 @@ def process_aln(sample_df, replicate):
                                      'score',
                                      'aln_len',
                                      'evalue',
-                                     'sig.',
                                      'family'])
-    out['replicate'] = replicate
+    out['sig.'] = out['evalue'].apply(lambda x: '*' if x < 1e-5 else 'n.s.')
     return out
-    
+
 
 def cluster_analysis():
     import pandas as pd
@@ -236,36 +205,24 @@ def cluster_analysis():
                        [rII, 'II'],
                        [rIII, 'III']]:
         print(f'- sampling at level {level}')
-        s1, s2, s3 = sample_seqs(clusters,
+
+        sampled = sample_seqs(clusters,
                                  rep,
                                  level,
-                                 1000)
-        print(f'... aligning first replicate')
-        s1 = fix_rnsamples(clusters,
-                           s1,
-                           rep,
-                           level)
-        s1 = process_aln(s1,
-                         '1')    
-        print(f'.... aligning second replicate')
-        s2 = fix_rnsamples(clusters,
-                           s2,
-                           rep,
-                           level)
-        s2 = process_aln(s2,
-                         '2')    
-        print(f'... aligning third replicate')
-        s3 = fix_rnsamples(clusters,
-                           s3,
-                           rep,
-                           level)
-        s3 = process_aln(s3,
-                         '3')
-        print('... merging results')
-        df = pd.concat([s1, s2, s3])
-        print('... exporting')
-        df.to_csv(f'output_clustering_significance_level{level}.tsv',
+                                 3000)
+        sampled = clusters[clusters['AMP accession'].isin(sampled)]
+        cols = ['AMP accession',
+                  f'SPHERE_fam level {level}',
+                  'sequence']
+        sampled = sampled[cols]
+        repdata = clusters[clusters['AMP accession'].isin(rep)]
+        sampled = sampled.merge(on=f'SPHERE_fam level {level}',
+                       right=repdata[cols])
+        sampled.rename(columns={f'SPHERE_fam level {level}': 'family'},
+                        inplace=True)
+        sampled = align_to_representative(sampled)
+        sampled.to_csv(f'output_clustering_significance_level{level}.tsv',
                   sep='\t',
                   header=True,
                   index=None)
-    
+
