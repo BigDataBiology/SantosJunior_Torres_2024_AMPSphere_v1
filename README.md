@@ -1,7 +1,16 @@
 # AMPSphere v2022-03
 
-- This repository contains files and scripts to generate analysis and figures in AMPSphere
-  paper.
+This repository contains files and scripts to generate analysis and figures in
+AMPSphere manuscript:
+
+> Computational exploration of the global microbiome for antibiotic discovery
+> Célio Dias Santos-Júnior, Marcelo Der Torossian Torres, Yiqian Duan, Álvaro
+> Rodríguez del Río, Thomas S.B. Schmidt, Hui Chong, Anthony Fullam, Michael
+> Kuhn, Chengkai Zhu, Amy Houseman, Jelena Somborski, Anna Vines, Xing-Ming
+> Zhao, Peer Bork, Jaime Huerta-Cepas, Cesar de la Fuente-Nunez, Luis Pedro
+> Coelho bioRxiv 2023.08.31.555663; doi:
+> https://doi.org/10.1101/2023.08.31.555663
+
 
 ## Info
 
