@@ -5,6 +5,7 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
+from matplotlib import cm
 
 from tqdm import tqdm
 from glob import glob
@@ -15,24 +16,14 @@ from scipy.stats import shapiro, norm, pearsonr
 from scipy.sparse import coo_matrix, save_npz, load_npz
 
 
-color_map = {'human gut' : (0.8509803921568627, 0.37254901960784315, 0.00784313725490196, 0.5),
-             'soil/plant' : (0.10588235294117647, 0.6196078431372549, 0.4666666666666667, 0.5),
-             'aquatic' : (0.4588235294117647, 0.4392156862745098, 0.7019607843137254, 0.5),
-             'anthropogenic' : (0.9058823529411765, 0.1607843137254902, 0.5411764705882353, 0.5),
-             'other human' : (0.4, 0.6509803921568628, 0.11764705882352941, 0.5),
-             'mammal gut' : (0.9019607843137255, 0.6705882352941176, 0.00784313725490196, 0.5),
-             'other animal' : (0.6509803921568628, 0.4627450980392157, 0.11372549019607843, 0.5),
-             'other' : (0.4, 0.4, 0.4, 0.5)}
-
 def convname(ampcode: str) -> str:
     '''
     Convert AMP access code into row index
     Example: AMP10.000_000 = 0
     '''
-    ampcode = ampcode[6:].replace('_', '')
-    return int(ampcode)
-    
-    
+    return int(ampcode[6:])
+
+
 def preprocess_files():
     '''
     Join mapping results for AMP genes against sample reads
@@ -40,14 +31,14 @@ def preprocess_files():
     samples_list = list of samples which the index in the list match to the column index in the sparse matrix
     data = sparse matrix (lil) of presence/absence with the rows being AMPs and columns being samples
     '''
-    print('Load dict of genes to proteins')    
+    print('Load dict of genes to proteins')
     headers = pd.read_table('data/headers.tsv.xz',
                             sep='\t',
                             header='infer',
                             index_col='gene')
     n = len(glob('data/uniques/*.xz'))
     tamps = len(set(headers.AMP))
-    headers['AMP'] = headers.AMP.apply(lambda x: convname(x))
+    headers['AMP'] = headers.AMP.apply(convname)
     headers = headers.to_dict()
     headers = headers['AMP']
     print('Processing mapping results')
@@ -90,8 +81,7 @@ def load_precomputed(override: bool=False):
                 df = load_npz('analysis/sparse_matrix.npz')
                 return (samples, df)
     print('Starting general process')
-    samples, df = preprocess_files()
-    return (samples, df)   
+    return preprocess_files()
 
 
 def metadata():
@@ -103,7 +93,7 @@ def metadata():
     '''
     with open('data/envo.pkl', 'rb') as handle:
         envo = pickle.load(handle)
-    return (envo['general_envo_name'], envo['high'])    
+    return (envo['general_envo_name'], envo['high'])
 
 
 def export_tables(protmap_res: list, samples_h: list, samples_g: list):
@@ -144,16 +134,11 @@ def export_tables(protmap_res: list, samples_h: list, samples_g: list):
     ghabs_out.close()
 
 
-def main():
-    samples, df = load_precomputed()
-    h, hi = metadata()
-    samples_g = [h.get(x) for x in samples]
-    samples_h = [hi.get(x) for x in samples]
-    df = df.tocsr()
-    print('Export tables')
-    export_tables(df, samples_h, samples_g)
+samples, df = load_precomputed()
+h, hi = metadata()
+samples_g = [h.get(x) for x in samples]
+samples_h = [hi.get(x) for x in samples]
+df = df.tocsr()
+print('Export tables')
+export_tables(df, samples_h, samples_g)
 
-
-if __name__ == '__main__':
-    main()
-    

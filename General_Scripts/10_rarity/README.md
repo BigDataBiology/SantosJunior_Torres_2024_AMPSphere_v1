@@ -1,5 +1,9 @@
 ## Non_host- and Host-associated AMP contents
 
+```bash
+python main.py
+```
+
 This script set will create diverse tables related to the rarity of candidate AMPs 
 in the different environments as well as the number of samples in which each
 AMP occurs.
@@ -26,12 +30,8 @@ The scripts used in this task are in the `utils/` folder and are explained bello
 
 | **Script** | **Function** | **Input** | **Outputs** |
 | :---: | :---: | :---: | :---: |
-| make_all_one_28112022.py | generate tables of number of samples per habitat in which we find each AMPs from mapping data | All inputs | Outputs to anaysis/ all the outputs |
+| main.py | generate tables of number of samples per habitat in which we find each AMPs from mapping data | All inputs | Outputs to anaysis/ all the outputs |
 
 All scripts and functions are united in the main.py script and to generate the results
 of this analysis, the user should simply:
-
-```
-    $ ./main.sh
-```
 
