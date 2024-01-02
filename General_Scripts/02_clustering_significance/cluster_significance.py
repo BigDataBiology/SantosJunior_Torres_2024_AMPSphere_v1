@@ -226,8 +226,11 @@ def cluster_analysis():
         sampled.rename(columns={f'SPHERE_fam level {level}': 'family'},
                         inplace=True)
         sampled = align_to_representative(sampled)
-        sampled.to_csv(f'output_clustering_significance_level{level}.tsv',
+        sampled.to_csv(f'outputs/output_clustering_significance_level{level}.tsv',
                   sep='\t',
                   header=True,
                   index=None)
+
+if __name__ == '__main__':
+    cluster_analysis()
 
