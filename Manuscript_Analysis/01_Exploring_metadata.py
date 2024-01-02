@@ -1,24 +1,10 @@
 #!/usr/bin/env python
-# coding: utf-8
 
-# # AMPSphere manuscript
-# 
-# This is a notebook meant to form the set of notebooks used to analyze the data in AMPSphere and write the manuscript:
-# 
-# __AMPSphere: Global survey of prokaryotic antimicrobial peptides shaping microbiomes__
-# 
-# Figures generated in this script formed the panel shown in Figure 1A, 5A, S4 and Table S1.
-# 
-# 
 # ###  Metadata exploration
-# 
+#
 # Exploration of metadata of metagenomes used in the AMPSphere.
-# 
+#
 
-# In[1]:
-
-
-# load libraries
 import pandas as pd
 import numpy as np
 import seaborn as sns
@@ -29,11 +15,9 @@ from matplotlib import cm
 from scipy import stats
 from itertools import combinations
 from statsmodels.stats.multitest import multipletests
+import environments
 
 plt.rcParams['svg.fonttype'] = 'none'
-
-
-# In[2]:
 
 
 higher_level = {'sediment' : 'other',
@@ -78,7 +62,7 @@ higher_level = {'sediment' : 'other',
         'cattle associated': 'other animal',
         'crustacean associated': 'other animal',
         'insect gut': 'other animal',
-        'goat gut': 'mammal gut', 
+        'goat gut': 'mammal gut',
         'rodent gut': 'mammal gut',
         'fisher gut': 'mammal gut',
         'human digestive tract': 'other human',
@@ -90,7 +74,7 @@ higher_level = {'sediment' : 'other',
         'annelidae associated': 'other animal',
         'bird skin': 'other animal',
         'beatle gut': 'other animal',
-        'termite gut': 'other animal', 
+        'termite gut': 'other animal',
         'fish gut': 'other animal',
         'mollusc associated': 'other animal',
         'ship worm associated': 'other animal',
@@ -100,7 +84,7 @@ higher_level = {'sediment' : 'other',
         'horse gut': 'mammal gut',
         'wasp gut': 'other animal',
         'guinea pig gut': 'mammal gut'}
-        
+
 is_host_associated = {'human gut' : True,
         'soil/plant' : False,
         'aquatic' : False,
@@ -110,20 +94,9 @@ is_host_associated = {'human gut' : True,
         'other animal' : True,
         'other' : False}
 
-color_map = {'human gut' : (0.8509803921568627, 0.37254901960784315, 0.00784313725490196),
-        'soil/plant' : (0.10588235294117647, 0.6196078431372549, 0.4666666666666667),
-        'aquatic' : (0.4588235294117647, 0.4392156862745098, 0.7019607843137254),
-        'anthropogenic' : (0.9058823529411765, 0.1607843137254902, 0.5411764705882353),
-        'other human' : (0.4, 0.6509803921568628, 0.11764705882352941),
-        'mammal gut' : (0.9019607843137255, 0.6705882352941176, 0.00784313725490196),
-        'other animal' : (0.6509803921568628, 0.4627450980392157, 0.11372549019607843),
-        'other' : (0.4, 0.4, 0.4)}
+color_map = environments.color_map
 
 
-# In[3]:
-
-
-# loading data
 meta = pd.read_table('../data_folder/metadata.tsv.xz')
 syns = pd.read_table('../data_folder/general_envo_names.tsv.xz')
 
@@ -139,9 +112,6 @@ nmeta = meta[['higher', 'latitude', 'longitude']].drop_duplicates()
 
 
 # ## Figure 1A
-
-# In[4]:
-
 
 fig, ax = plt.subplots(figsize=(8, 6))
 countries = gpd.read_file(gpd.datasets.get_path("naturalearth_lowres"))
@@ -167,21 +137,14 @@ fig.tight_layout()
 ax.legend(loc=1)
 
 
-# In[5]:
-
-
 general = meta['general_envo_name'].value_counts()
 general = general[general > 100]
 general['other'] = len(meta) - general.sum()
 
-
-# In[6]:
-
-
 samples = pd.read_table('../data_folder/samples-min500k-assembly-prodigal-stats.tsv.xz', index_col=0)
 gmsc = pd.read_table("../data_folder/gmsc_amp_genes_envohr_source.tsv.gz")
 
-gmsc = gmsc[gmsc.is_metagenomic == True]
+gmsc = gmsc.query('is_metagenomic')
 gmsc = gmsc.groupby('sample').agg('size')
 
 samples = pd.concat([samples, gmsc], axis=1).rename({0: 'ampsphere_amps'}, axis=1)
@@ -193,9 +156,6 @@ meta['ampsphere_amps_per_assembly_mbps'] = meta.eval('1_000_000 * ampsphere_amps
 meta = meta[~meta.ampsphere_amps.isna()]
 
 
-# In[7]:
-
-
 inserts_filtered = meta.groupby('general_envo_name').sum()['inserts_filtered']
 inserts_filtered = inserts_filtered.reindex(general.index)
 inserts_filtered['other'] = meta['inserts_filtered'].sum() - inserts_filtered.sum()
@@ -205,19 +165,12 @@ smORFs = meta.groupby('general_envo_name').sum()['smORFs']
 smORFs = smORFs.reindex(general.index)
 smORFs['other'] = meta['smORFs'].sum() - smORFs.sum()
 
-
-# In[8]:
-
-
 assembly_total_length = meta.groupby('general_envo_name').sum()['assembly_total_length']
 assembly_total_length = assembly_total_length.reindex(general.index)
 assembly_total_length['other'] = meta['assembly_total_length'].sum() - assembly_total_length.sum()
 
 meta['is_host_associated'] = meta['general_envo_name'].map(lambda c : is_host_associated[higher_level.get(c, 'other')])
 meta['is_host_associated'] = meta.is_host_associated.map(lambda i: 'host' if i else 'non-host')
-
-
-# In[9]:
 
 
 # remove outliers
@@ -227,35 +180,23 @@ ll, ul = q1-(1.5*iqr), q3+(1.5*iqr)
 
 sel = meta[(meta.ampsphere_amps_per_assembly_mbps <= ul) & (meta.ampsphere_amps_per_assembly_mbps >= ll)]
 
-
-# In[10]:
-
-
 # exclude habitats with less than 100 samples
 count_envo = sel['general_envo_name'].value_counts()
 count_envo = count_envo[count_envo >= 100]
 
 sel = sel[sel.general_envo_name.isin(count_envo.index)]  # at least 100 samples
 
-order = sel.groupby('general_envo_name').median()['ampsphere_amps_per_assembly_mbps'].sort_values().index
+order = sel.groupby('general_envo_name')['ampsphere_amps_per_assembly_mbps'].median().sort_values().index
 
 
 # ## Figure 5A
-
-# In[11]:
-
 
 # sampling 100 random points per habitat
 sels = []
 for h in order:
     cur = sel[sel.general_envo_name == h]
     sels.append(cur.sample(100))
-
-sels=pd.concat(sels)
-
-
-# In[12]:
-
+sels = pd.concat(sels)
 
 fig,ax = plt.subplots()
 ax.set_xlim(-1,2)
@@ -277,26 +218,19 @@ sns.swarmplot(x='is_host_associated',
         s=3,
         )
 
-plt.xlabel('')
-plt.ylabel('AMPs per assembled Mbp')
-
-
-# In[13]:
+ax.set_xlabel('')
+ax.set_ylabel('AMPs per assembled Mbp')
 
 
 x = sel.query('higher == "anthropogenic"')
-x.groupby('general_envo_name').mean()['ampsphere_amps_per_assembly_mbps'].sort_values()
+x.groupby('general_envo_name')['ampsphere_amps_per_assembly_mbps'].mean().sort_values()
 
 u, p = stats.mannwhitneyu(sel[sel.is_host_associated == 'host']['ampsphere_amps_per_assembly_mbps'],
                           sel[sel.is_host_associated == 'non-host']['ampsphere_amps_per_assembly_mbps'])
 
-print(f'Host vs. non-host > Mann-WhitneyU = {u}, p-value = {p}')                          
-
+print(f'Host vs. non-host > Mann-WhitneyU = {u}, p-value = {p}')
 
 # ## Supplementary Figure S4
-
-# In[14]:
-
 
 fig,ax = plt.subplots()
 
@@ -319,25 +253,21 @@ sns.swarmplot(x='general_envo_name',
 for x in ax.get_xticklabels():
     x.set_rotation(90)
 
-plt.xlabel('Habitat')
-plt.ylabel('AMPs per assembled Mbp')
-plt.tight_layout()
+ax.set_xlabel('Habitat')
+ax.set_ylabel('AMPs per assembled Mbp')
+fig.tight_layout()
 
 
 # ## Supplementary Table S1
-
-# In[15]:
-
 
 # get supplementary info
 m = meta[['ena_ers_sample_id', 'database', 'access_status', 'study', 'study_accession',
           'general_envo_name', 'higher', 'inserts_filtered', 'assembly_total_length',
           'smORFs', 'ampsphere_amps', 'is_host_associated']].copy()
 
-m.rename({'higher': 'macro_environment',
+m.rename(columns={'higher': 'macro_environment',
           'general_envo_name': 'micro_environment'},
-         axis=1,
          inplace=True)
-          
+
 m.reset_index(drop=True)
 
