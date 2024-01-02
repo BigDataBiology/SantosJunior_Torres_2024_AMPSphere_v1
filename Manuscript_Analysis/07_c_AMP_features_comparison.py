@@ -18,7 +18,7 @@ plt.rcParams['xtick.labelsize'] = 'smaller'
 ampsphere = pd.read_csv('../data_folder/ampsphere_v2022-03.features.tsv.gz', sep="\t")
 dramp = pd.read_csv('../data_folder/dramp_v3.features.tsv.gz', sep="\t")
 macrel = pd.read_csv('../data_folder/macrel_trainpos.features.tsv.gz', sep="\t")
-neg_macrel = pd.read_csv('../data_folder/macrel_trainneg.features.tsv.gz', sep="\t")
+neg_macrel = pd.read_csv('new_data/macrel_trainneg.features.tsv.gz', sep="\t")
 
 # Macrel's internal script to compute features did not use the protein length
 # as a feature, and therefore, to compare it through these different datasets,
@@ -26,20 +26,19 @@ neg_macrel = pd.read_csv('../data_folder/macrel_trainneg.features.tsv.gz', sep="
 # We also remove columns that Macrel uses in its internal pipeline and we won't
 # be using here.
 
-
 for feats in [ampsphere, dramp, macrel, neg_macrel]:
     feats['length'] = feats.sequence.str.len()
     gc = GlobalDescriptor(feats.sequence.tolist())
     gc.hydrophobic_ratio()
     feats['hydro_ratio'] = gc.descriptor.ravel()
 
-    pd = PeptideDescriptor(feats.sequence.tolist(), 'flexibility')
-    pd.calculate_global()
-    feats['flexibility'] = pd.descriptor.ravel()
+    pepd = PeptideDescriptor(feats.sequence.tolist(), 'flexibility')
+    pepd.calculate_global()
+    feats['flexibility'] = pepd.descriptor.ravel()
 
-    pd = PeptideDescriptor(feats.sequence.tolist(), 'gravy')
-    pd.calculate_global()
-    feats['gravy'] = pd.descriptor.ravel()
+    pepd = PeptideDescriptor(feats.sequence.tolist(), 'gravy')
+    pepd.calculate_global()
+    feats['gravy'] = pepd.descriptor.ravel()
 
     feats.drop(['group',
             'sequence'],
@@ -121,5 +120,20 @@ for ix,(feat,label) in enumerate(panels):
                  fontfamily='Sans Serif',
                  fontsize='small',
                  loc='left')
+
 fig.savefig('figures/07_c_AMP_features_comparison.svg', bbox_inches='tight')
 fig.savefig('figures/07_c_AMP_features_comparison.png', bbox_inches='tight', dpi=300)
+
+data_groups = [neg_macrel, macrel, dramp, ampsphere]
+data_names = ['Macrel (neg)', 'Macrel (pos)', 'DRAMP', 'AMPSphere']
+comparisons = []
+for i in range(len(data_groups)):
+    for j in range(i+1, len(data_groups)):
+        for feat,label in panels:
+            u,p = mannwhitneyu(data_groups[i][feat], data_groups[j][feat])
+            comparisons.append((data_names[i], data_names[j], feat, p))
+            print(f'{data_names[i]} vs {data_names[j]}: {label}: p={p:.2e}')
+comparisons = pd.DataFrame(comparisons, columns=['Group 1', 'Group 2', 'Feature', 'P-value'])
+_, comparisons['padj'], _, _ = multipletests(comparisons['P-value'])
+comparisons.to_csv('outputs/07_c_AMP_features_comparison.tsv', sep='\t', header=True, index=None)
+
