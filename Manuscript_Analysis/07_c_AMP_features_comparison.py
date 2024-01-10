@@ -5,10 +5,13 @@
 import pandas as pd
 import numpy as np
 import seaborn as sns
+from scipy import stats
 from matplotlib import pyplot as plt
 from matplotlib import cm
 from modlamp.descriptors import GlobalDescriptor
 from modlamp.descriptors import PeptideDescriptor
+from statsmodels.stats.multitest import multipletests
+
 from os import makedirs
 makedirs('figures', exist_ok=True)
 plt.rcParams['svg.fonttype'] = 'none'
@@ -130,7 +133,7 @@ comparisons = []
 for i in range(len(data_groups)):
     for j in range(i+1, len(data_groups)):
         for feat,label in panels:
-            u,p = mannwhitneyu(data_groups[i][feat], data_groups[j][feat])
+            u,p = stats.mannwhitneyu(data_groups[i][feat], data_groups[j][feat])
             comparisons.append((data_names[i], data_names[j], feat, p))
             print(f'{data_names[i]} vs {data_names[j]}: {label}: p={p:.2e}')
 comparisons = pd.DataFrame(comparisons, columns=['Group 1', 'Group 2', 'Feature', 'P-value'])
