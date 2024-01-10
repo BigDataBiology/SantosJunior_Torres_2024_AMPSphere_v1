@@ -2,64 +2,50 @@ import gzip
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from Bio import SeqIO
+from macrel.fasta import fasta_iter
 from itertools import combinations
 
-quality = pd.read_table('quality_assessment.tsv.xz')
+quality = pd.read_table('data/quality_assessment.tsv.xz', index_col=0)
 
-for k in quality.columns:
-   with open(f'passed_{k}.txt', 'w') as ofile:
-       for x in quality.loc[quality[k] == 'Passed', 'AMP']:
-           ofile.write(f'{x}\n')
-
-df = pd.read_table('homologs_table.tsv')
-with open('dramp_starpep.txt', 'w') as ofile:
-    for x in df[(df.DRAMP + df.StarPepDB45k) > 0]['AMPSphere']:
-        ofile.write(f'{x}\n')
-
-with open('smprot.txt', 'w') as ofile:
-    for x in df[df.SmProtv2 == True]['AMPSphere']:
-        ofile.write(f'{x}\n')
-
-with open('gmgc.txt', 'w') as ofile:
-    for x in df[df.GMGCv1 == True]['AMPSphere']:
-        ofile.write(f'{x}\n')
-
-hq = quality.set_index('AMP')
-hq = hq == 'Passed'
-hq = hq.drop(['metaproteomes', 'metatranscriptomes'], axis=1)
-hq = hq.sum(axis=1)
-hq = hq[hq == 3].index
-
-with open('hq_candidates.txt', 'w') as ofile:
-    for x in hq:
-        ofile.write(f'{x}\n')
+quality = (quality == 'Passed')
+quality.drop(
+        ['metaproteomes', 'metatranscriptomes'],
+        axis=1,
+        inplace=True)
 
 ## Uses interactivenn to create the Venn's Diagrams
 
-copred = pd.read_table('AMP_coprediction_AMPSphere.tsv')
-sns.barplot(data=((copred.set_index('SeqID') >= 0.5).sum(axis=1) - 1).value_counts().sort_index().reset_index(), x='index', y=0, color='#1b9e77')
-plt.xlabel('Other AMP prediction systems than Macrel')
-plt.ylabel('Number of AMPs')
-plt.savefig('panel_d.svg')
-plt.close()
+copred = pd.read_table('data/AMP_coprediction_AMPSphere.tsv.xz', index_col=0)
+fig,ax = plt.subplots(figsize=(5,5))
+sns.barplot(data=((copred >= 0.5).sum(axis=1) - 1).value_counts().sort_index().reset_index(),
+            x='index',
+            y='count',
+            color='#1b9e77',
+            ax=ax)
 
-ampsphere = dict()
-for record in SeqIO.parse(gzip.open('AMPSphere_v.2022-03.faa.gz', 'rt'), 'fasta'):
-    ampsphere[str(record.seq)] = record.id
+ax.set_xlabel('Other AMP prediction systems than Macrel')
+ax.set_ylabel('Number of AMPs')
+fig.tight_layout()
+fig.savefig('figures/panel_d.svg')
 
-gmsc = pd.read_table('GMSC10.Macrel_05.AMPs.tsv.gz')
+
+ampsphere = {}
+for h,seq in fasta_iter('data/AMPSphere_v.2022-03.faa.gz'):
+    ampsphere[seq] = h
+
+gmsc = pd.read_table('data/GMSC10.Macrel_05.AMPs.tsv.gz')
 gmsc = gmsc.Sequence.value_counts()
 gmsc = gmsc.reset_index().rename({0: 'sequence'}, axis=1)
 gmsc['ampsphere'] = [ampsphere.get(idx) for idx in gmsc['index']]
 gmsc = gmsc.dropna()
 
-df = df.set_index('AMPSphere')
-homologs = df[df.DRAMP == True].index
+df = pd.read_table('homologs_table.tsv', index_col=0)
+homologs = df[df.DRAMP].index
 df2 = gmsc[gmsc.ampsphere.isin(homologs)]
 
+rare_amps = []
 for x in df.columns:
-    l = df[df[x] == True].index
+    l = df[df[x]].index
     n = len(gmsc[(gmsc['ampsphere'].isin(l)) & (gmsc.Sequence <= 5)])
     rare_amps.append((x, n*100/len(l)))
 
@@ -70,9 +56,9 @@ rare_amps.append(('Non-homologous', n*100/len(nonhomologs)))
 rare_amps = pd.DataFrame(rare_amps, columns=['database', 'pct_homologs_under_5'])
 rare_amps.sort_values(by='pct_homologs_under_5', inplace=True)
 
-sns.barplot(data=rare_amps, x='database', y='pct_homologs_under_5', color='#1b9e77')
-plt.xlabel("Database")
-plt.ylabel("% of homologs in 5 samples or less")
-plt.savefig("panel_c.svg")
-plt.close()
+fig,ax = plt.subplots()
+sns.barplot(data=rare_amps, x='database', y='pct_homologs_under_5', color='#1b9e77', ax=ax)
+ax.set_xlabel("Database")
+ax.set_ylabel("% of homologs in 5 samples or less")
+fig.savefig('figures/panel_c.svg')
 
