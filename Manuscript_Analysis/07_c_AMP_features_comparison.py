@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 # Here we will show how c_AMPs from AMPSphere are relatively similar to those in the training set of Macrel (Santos-Júnior et al., 2020) and DRAMP 3.0 (Shi et al., 2021). To that, we will use pre-computed features calculated using Macrel's internal scripts from the peptide sequences in those three databases.
 
 import pandas as pd
@@ -16,7 +14,7 @@ from os import makedirs
 makedirs('figures', exist_ok=True)
 plt.rcParams['svg.fonttype'] = 'none'
 plt.rcParams['font.family'] = 'sans-serif'
-plt.rcParams['xtick.labelsize'] = 'smaller'
+plt.rcParams['xtick.labelsize'] = 7
 
 ampsphere = pd.read_csv('../data_folder/ampsphere_v2022-03.features.tsv.gz', sep="\t")
 dramp = pd.read_csv('../data_folder/dramp_v3.features.tsv.gz', sep="\t")
@@ -66,10 +64,16 @@ def getlims(feat):
             xmax = xs[-cut]
     return xmin, xmax
 
+for f in ['smallAA', 'basicAA', 'polarAA', 'aromaticAA', 'chargedAA']:
+    for feats in [ampsphere, dramp, macrel, neg_macrel]:
+        feats[f] *= 100
 panels = [
           ('length',     'Length (residues)'),
-          ('smallAA',    'Small residues'),
-          ('basicAA',    'Basic residues'),
+          ('smallAA',    'Small residues (%)'),
+          ('basicAA',    'Basic residues (%)'),
+          ('polarAA',    'Polar residues (%)'),
+          ('aromaticAA', 'Aromatic residues (%)'),
+          ('chargedAA',  'Charged residues (%)'),
           ('pI',         'Isoelectric point'),
           ('charge',     'Charge at pH 7.0'),
           ('aindex',     'Aliphatic index'),
@@ -77,20 +81,22 @@ panels = [
           ('boman',      'Boman index'),
           ('hmoment',    'Hydrophobic\nmoment'),
           ('hydro_ratio','Hydrophobic ratio'),
+          ('hydrophobicity','Hydrophobicity'),
           ('flexibility','Flexibility'),
           ('gravy',      'GRAVY'),
           ]
 
 PANEL_WIDTH = 0.2
-SUBPANEL_HEIGHT = 0.07
+SUBPANEL_HEIGHT = 0.05
+
 fig = plt.figure()
 for ix,(feat,label) in enumerate(panels):
     pos_i = ix % 4
-    pos_j = ix // 4
-    ax0 = fig.add_axes([.025 + pos_i * .25, 0.075 + pos_j * .3, PANEL_WIDTH, SUBPANEL_HEIGHT])
-    ax1 = fig.add_axes([.025 + pos_i * .25, 0.100 + pos_j * .3, PANEL_WIDTH, SUBPANEL_HEIGHT], sharex=ax0)
-    ax2 = fig.add_axes([.025 + pos_i * .25, 0.125 + pos_j * .3, PANEL_WIDTH, SUBPANEL_HEIGHT], sharex=ax0)
-    ax3 = fig.add_axes([.025 + pos_i * .25, 0.150 + pos_j * .3, PANEL_WIDTH, SUBPANEL_HEIGHT], sharex=ax0)
+    pos_j = 3 - ix // 4
+    ax0 = fig.add_axes([.025 + pos_i * .25, 0.075 + pos_j * .23, PANEL_WIDTH, SUBPANEL_HEIGHT])
+    ax1 = fig.add_axes([.025 + pos_i * .25, 0.100 + pos_j * .23, PANEL_WIDTH, SUBPANEL_HEIGHT], sharex=ax0)
+    ax2 = fig.add_axes([.025 + pos_i * .25, 0.125 + pos_j * .23, PANEL_WIDTH, SUBPANEL_HEIGHT], sharex=ax0)
+    ax3 = fig.add_axes([.025 + pos_i * .25, 0.150 + pos_j * .23, PANEL_WIDTH, SUBPANEL_HEIGHT], sharex=ax0)
     for data,data_label,ax,c in zip([neg_macrel, macrel, dramp, ampsphere],
                                 ['Macrel (neg)', 'Macrel (pos)', 'DRAMP', 'AMPSphere'],
                                 [ax0, ax1, ax2, ax3],
@@ -100,6 +106,7 @@ for ix,(feat,label) in enumerate(panels):
         sns.kdeplot(ax=ax,
                     fill=True,
                     bw_method='silverman',
+                    bw_adjust=(2. if feat.endswith('AA') else 1.),
                     cut=0,
                     data=data,
                     x=feat,
