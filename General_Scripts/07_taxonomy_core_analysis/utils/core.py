@@ -8,7 +8,7 @@ def classificationprop(x):
     Classify the prevalence percent
     into different categories
     '''
-    if x >= 90: return 'core'
+    if x >= 95: return 'core'
     if x >= 50: return 'shell'
     if x < 50: return 'accessory'
 
