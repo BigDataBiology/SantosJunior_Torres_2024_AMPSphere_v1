@@ -1,13 +1,13 @@
-# Figure 2|AMP candidates are mostly accessory from a small number of microbial species
+# AMP candidates are mostly accessory from a small number of microbial species
 
-Figure 2 brings data about the:
+Figure 5 brings data about the:
 
 	(a) taxonomic affiliation of AMPs in our database;
 	(b) the distribution of AMPs within the Prevotella genus|the more abundant source of AMPs in the AMPSphere;
 	(c) quality families span a small number of genera;
 	(d) AMP candidates and families from ProGenomes2 along with their high quality subsets were classified as core, shell, and accessory genes.
 
-To reproduce the data and panels of figure 2:
+To reproduce the data and panels of figure 5:
 
 ```
 # to reproduce all features in the supplementary figure 1:

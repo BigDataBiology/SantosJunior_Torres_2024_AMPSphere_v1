@@ -1,4 +1,8 @@
-# Here we will show how c_AMPs from AMPSphere are relatively similar to those in the training set of Macrel (Santos-Júnior et al., 2020) and DRAMP 3.0 (Shi et al., 2021). To that, we will use pre-computed features calculated using Macrel's internal scripts from the peptide sequences in those three databases.
+# Here we will show how c_AMPs from AMPSphere are relatively similar to those
+# in the training set of Macrel (Santos-Júnior et al., 2020) and DRAMP 3.0 (Shi
+# et al., 2021). To that, we will use pre-computed features calculated using
+# Macrel's internal scripts from the peptide sequences in those three
+# databases.
 
 import pandas as pd
 import numpy as np
