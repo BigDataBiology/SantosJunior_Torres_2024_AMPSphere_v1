@@ -1,6 +1,5 @@
 name: base
 channels:
-  - file:///home/celio/Downloads/LinuxArtifacts/packages
   - conda-forge
   - bioconda
   - defaults
@@ -816,4 +815,3 @@ dependencies:
     - wrapt==1.13.3
     - xgboost==1.5.0
     - xlsxwriter==1.4.3
-prefix: /home/celio/miniconda3
